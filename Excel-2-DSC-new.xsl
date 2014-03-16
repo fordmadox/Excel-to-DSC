@@ -182,7 +182,7 @@
             as="xs:integer"/>
         <xsl:param name="level"
             select="if (not(matches(ss:Cell[2]/ss:Data, '^(series|subseries|file|item)$'))) then 'file' else ss:Cell[2]/ss:Data/text()
-            (: in other words, if the second column of the row is blank, then 'file' will be used as the @level type by defaul :)"
+            (: in other words, if the second column of the row is blank, then 'file' will be used as the @level type by default :)"
             as="xs:string"/>
 
         <!-- should I add an option to use c elements OR ennumerated components?  this would be simple to do, but it would require a slightly longer style sheet.-->
