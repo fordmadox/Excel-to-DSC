@@ -272,6 +272,14 @@
                     <xsl:choose>
                         <!-- 1st test checks to see if the current Cell has a style ID that would indicate that the font is supposed to be red -->
                         <!-- the second test makes sure that the cell and the data don't both have the RED font color specified.  without the "not" statement, two nested title elements might appear in the output. -->
+                        <xsl:when test="key('style-ids_match-for-color', $style-id)/ss:Font/@ss:Color='#FF0000' 
+                            and 
+                            not(ss:Data/html:Font/@html:Color='#FF0000')
+                            and key('style-ids_match-for-color', $style-id)/ss:Font/@ss:Underline">
+                            <title render="underline">
+                                <xsl:apply-templates/>
+                            </title>
+                        </xsl:when>
                         <xsl:when
                             test="
                             key('style-ids_match-for-color', $style-id)/ss:Font/@ss:Color='#FF0000' 
