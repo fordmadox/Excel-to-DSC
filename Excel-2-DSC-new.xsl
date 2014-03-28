@@ -17,8 +17,6 @@
     </xd:doc>
 
     <!-- to do:
-        
-        Create a DSC to Excel (office:spreadsheet) transformation, enabling a smooth roundtrip back and forth between EAD and Excel
    
         still need to update the following columns to make them work correctly:
 
@@ -126,7 +124,7 @@
         <xsl:param name="current-index"/>
         <xsl:param name="previous-index"/>
         <xsl:param name="cells-before-previous-index"/>
-        <xsl:value-of
+        <xsl:sequence
             select="if ($current-index) then $current-index else
             if ($previous-index) then 
             $cells-before-previous-index + $previous-index + 1
@@ -206,10 +204,10 @@
 
 
     <!--added [ss:Data] to the XPath since if you copy and paste a column of Data into Excel,  Excel will export a ss:Cell...  but
-                     that cell won't have any ss:Data.  -->
+                     that cell won't have any ss:Data.  this will ensure that the empty sequence (in the else statement) is supplied-->
     <xsl:template match="ss:Cell[ss:Data]" mode="did">
         <xsl:param name="style-id" select="@ss:StyleID"/>
-        <xsl:variable name="position" select="position()"/>
+        <xsl:variable name="position" select="position()" as="xs:integer"/>
         <xsl:variable name="current-index" select="xs:integer(@ss:Index)"/>
         <xsl:variable name="previous-index"
             select="xs:integer(preceding-sibling::ss:Cell[@ss:Index][1]/@ss:Index)"/>
@@ -227,15 +225,22 @@
             </xsl:call-template>
         </xsl:if>
         <xsl:choose>
-            <!-- in other words, column number 5 must be blank, and we don't have a textual description for the unitdate-->
+            <!-- in other words, column number 5 must be blank (no Cell in the output at all)-->
             <xsl:when test="@ss:Index eq '6'">
                 <xsl:call-template name="did-stuff">
                     <xsl:with-param name="column-number" select="$column-number" as="xs:integer"/>
                     <xsl:with-param name="style-id" select="$style-id"/>
                 </xsl:call-template>
             </xsl:when>
-            <!-- in other words, column 5 isn't blank -->
+            <!-- in other words, column 5 isn't blank (has Cell/Data) -->
             <xsl:when test="$column-number eq 5">
+                <xsl:call-template name="did-stuff">
+                    <xsl:with-param name="column-number" select="$column-number" as="xs:integer"/>
+                    <xsl:with-param name="style-id" select="$style-id"/>
+                </xsl:call-template>
+            </xsl:when>
+            <!-- in other words, column 5 isn't entirely blank (it has a Cell, but it doesn't have any Data), so we just use column 6 -->
+            <xsl:when test="$column-number eq 6">
                 <xsl:call-template name="did-stuff">
                     <xsl:with-param name="column-number" select="$column-number" as="xs:integer"/>
                     <xsl:with-param name="style-id" select="$style-id"/>
@@ -246,7 +251,7 @@
 
 
     <!--added [ss:Data] to the XPath since if you copy and paste a column of Data into Excel,  Excel will export a ss:Cell...  but
-                     that cell won't have any ss:Data.  -->
+                     that cell won't have any ss:Data.  this will ensure that the empty sequence (in the else statement) is supplied-->
     <xsl:template match="ss:Cell[ss:Data]" mode="non-did">
         <xsl:variable name="position" select="position()"/>
         <xsl:variable name="current-index" select="xs:integer(@ss:Index)"/>
@@ -332,7 +337,7 @@
             </xsl:when>
             <!-- there should a better way to deal with dates / other grouped cells -->
             <xsl:when test="$column-number eq 5">                
-                <!--added some DateTime checking. Still need to add this to all of the date fields -->
+                <!--added some DateTime checking. Might want to add this to all of the date fields -->
                 <xsl:variable name="year-begin"
                     select="if (following-sibling::ss:Cell[ss:NamedCell/@ss:Name='year_begin'][ss:Data/@ss:Type='DateTime'])
                     then following-sibling::ss:Cell[ss:NamedCell/@ss:Name='year_begin']/ss:Data/year-from-dateTime(.)    
@@ -380,32 +385,32 @@
                     <xsl:value-of select="."/>
                 </unitdate>
             </xsl:when>
-            <xsl:when test="$column-number eq 6 and ss:Data">                
+            <xsl:when test="$column-number eq 6">                
                 <xsl:variable name="year-begin"
                     select="if (ss:Data[@ss:Type='DateTime'])
                     then ss:Data/year-from-dateTime(.)    
                     else if (ss:Date[not(@ss:Type)]) then format-number(ss:Data, '0000')
                     else ''"/>
                 <xsl:variable name="month-begin"
-                    select="if (following-sibling::ss:Cell[ss:NamedCell/@ss:Name='month_begin'])
+                    select="if (following-sibling::ss:Cell[ss:NamedCell/@ss:Name='month_begin'][ss:Data])
                     then concat('-', following-sibling::ss:Cell[ss:NamedCell/@ss:Name='month_begin']/format-number(., '00'))
                     else ''"/>
                 <xsl:variable name="day-begin"
-                    select="if (following-sibling::ss:Cell[ss:NamedCell/@ss:Name='day_begin'])
+                    select="if (following-sibling::ss:Cell[ss:NamedCell/@ss:Name='day_begin'][ss:Data])
                     then concat('-', following-sibling::ss:Cell[ss:NamedCell/@ss:Name='day_begin']/format-number(., '00'))
                     else ''"/>
                 <xsl:variable name="year-end"
                     select="if (following-sibling::ss:Cell[ss:NamedCell/@ss:Name='year_end'][ss:Data/@ss:Type='DateTime'])
                     then following-sibling::ss:Cell[ss:NamedCell/@ss:Name='year_end']/ss:Data/year-from-dateTime(.)    
-                    else if (following-sibling::ss:Cell[ss:NamedCell/@ss:Name='year_end']) 
+                    else if (following-sibling::ss:Cell[ss:NamedCell/@ss:Name='year_end'][ss:Data]) 
                     then following-sibling::ss:Cell[ss:NamedCell/@ss:Name='year_end']/format-number(., '0000')
                     else ''"/>
                 <xsl:variable name="month-end"
-                    select="if (following-sibling::ss:Cell[ss:NamedCell/@ss:Name='month_end'])
+                    select="if (following-sibling::ss:Cell[ss:NamedCell/@ss:Name='month_end'][ss:Data])
                     then concat('-', following-sibling::ss:Cell[ss:NamedCell/@ss:Name='month_end']/format-number(., '00'))
                     else ''"/>
                 <xsl:variable name="day-end"
-                    select="if (following-sibling::ss:Cell[ss:NamedCell/@ss:Name='day_end'])
+                    select="if (following-sibling::ss:Cell[ss:NamedCell/@ss:Name='day_end'][ss:Data])
                     then concat('-', following-sibling::ss:Cell[ss:NamedCell/@ss:Name='day_end']/format-number(., '00'))
                     else ''"/>
                 <unitdate type="inclusive">
@@ -427,30 +432,28 @@
                 </unitdate>
             </xsl:when>
 
-            <xsl:when test="$column-number eq 12 and ss:Data">
+            <xsl:when test="$column-number eq 12">
                 <!--added [ss:Data] to the XPath since if you copy and paste a column of Data into Excel,  Excel will export a ss:Cell...  but
                      that cell won't have any ss:Data.  this will ensure that the empty sequence (in the else statement) is supplied-->
-                <!-- I don't need to check for ss:Data again, to create the next variable, but I haven't udpated this yet since I'm still not sure
-                    of the best way to handle these grouped date sections -->
                 <xsl:variable name="bulk-year-begin" select="if (ss:Data) then format-number(., '0000') else ''"/>
                 <xsl:variable name="bulk-month-begin"
-                    select="if (following-sibling::ss:Cell[ss:NamedCell/@ss:Name='bulk_month_begin'])
+                    select="if (following-sibling::ss:Cell[ss:NamedCell/@ss:Name='bulk_month_begin'][ss:Data])
                     then concat('-', following-sibling::ss:Cell[ss:NamedCell/@ss:Name='bulk_month_begin']/format-number(., '00'))
                     else ''"/>
                 <xsl:variable name="bulk-day-begin"
-                    select="if (following-sibling::ss:Cell[ss:NamedCell/@ss:Name='bulk_day_begin'])
+                    select="if (following-sibling::ss:Cell[ss:NamedCell/@ss:Name='bulk_day_begin'][ss:Data])
                     then concat('-', following-sibling::ss:Cell[ss:NamedCell/@ss:Name='bulk_day_begin']/format-number(., '00'))
                     else ''"/>
                 <xsl:variable name="bulk-year-end"
-                    select="if (following-sibling::ss:Cell[ss:NamedCell/@ss:Name='bulk_year_end'])
+                    select="if (following-sibling::ss:Cell[ss:NamedCell/@ss:Name='bulk_year_end'][ss:Data])
                     then following-sibling::ss:Cell[ss:NamedCell/@ss:Name='bulk_year_end']/format-number(., '0000')
                     else ''"/>
                 <xsl:variable name="bulk-month-end"
-                    select="if (following-sibling::ss:Cell[ss:NamedCell/@ss:Name='bulk_month_end'])
+                    select="if (following-sibling::ss:Cell[ss:NamedCell/@ss:Name='bulk_month_end'][ss:Data])
                     then concat('-', following-sibling::ss:Cell[ss:NamedCell/@ss:Name='bulk_month_end']/format-number(., '00'))
                     else ''"/>
                 <xsl:variable name="bulk-day-end"
-                    select="if (following-sibling::ss:Cell[ss:NamedCell/@ss:Name='bulk_day_end'])
+                    select="if (following-sibling::ss:Cell[ss:NamedCell/@ss:Name='bulk_day_end'][ss:Data])
                     then concat('-', following-sibling::ss:Cell[ss:NamedCell/@ss:Name='bulk_day_end']/format-number(., '00'))
                     else ''"/>
                 <unitdate type="bulk">
