@@ -133,6 +133,9 @@
     </xsl:function>
 
     <xsl:template match="ss:Workbook">
+        <!--ss:Row[ss:Cell[1]/ss:Data eq '0' ][1]
+            Treat that as collection-level info for this top template 
+        (update Excel file to allow 0 - 12 ?)-->
         <ead>
             <eadheader>
                 <eadid/>
@@ -176,7 +179,7 @@
     <xsl:template match="ss:Row">
         <xsl:param name="depth" select="ss:Cell[1]/ss:Data" as="xs:integer"/>
         <xsl:param name="following-depth"
-            select="if (following-sibling::ss:Row) 
+            select="if (following-sibling::ss:Row/ss:Cell/ss:Data) 
             then following-sibling::ss:Row[1]/ss:Cell[1]/ss:Data 
             else 0"
             as="xs:integer"/>
@@ -285,7 +288,8 @@
                     <xsl:choose>
                         <!-- 1st test checks to see if the current Cell has a style ID that would indicate that the font is supposed to be red -->
                         <!-- the second test makes sure that the cell and the data don't both have the RED font color specified.  without the "not" statement, two nested title elements might appear in the output. -->
-                        <xsl:when test="key('style-ids_match-for-color', $style-id)/ss:Font/@ss:Color='#FF0000' 
+                        <xsl:when
+                            test="key('style-ids_match-for-color', $style-id)/ss:Font/@ss:Color='#FF0000' 
                             and 
                             not(ss:Data/html:Font/@html:Color='#FF0000')
                             and key('style-ids_match-for-color', $style-id)/ss:Font/@ss:Underline">
@@ -336,56 +340,58 @@
                 </unittitle>
             </xsl:when>
             <!-- there should a better way to deal with dates / other grouped cells -->
-            <xsl:when test="$column-number eq 5">                
+            <xsl:when test="$column-number eq 5">
                 <!--added some DateTime checking. Might want to add this to all of the date fields -->
                 <xsl:variable name="year-begin"
                     select="if (following-sibling::ss:Cell[ss:NamedCell/@ss:Name='year_begin'][ss:Data/@ss:Type='DateTime'])
                     then following-sibling::ss:Cell[ss:NamedCell/@ss:Name='year_begin']/ss:Data/year-from-dateTime(.)    
-                    else if (following-sibling::ss:Cell[ss:NamedCell/@ss:Name='year_begin']) 
+                    else if (following-sibling::ss:Cell[ss:NamedCell/@ss:Name='year_begin'][ss:Data]) 
                     then following-sibling::ss:Cell[ss:NamedCell/@ss:Name='year_begin']/format-number(., '0000')
                     else ''"/>
                 <xsl:variable name="month-begin"
-                    select="if (following-sibling::ss:Cell[ss:NamedCell/@ss:Name='month_begin'])
+                    select="if (following-sibling::ss:Cell[ss:NamedCell/@ss:Name='month_begin'][ss:Data])
                     then concat('-', following-sibling::ss:Cell[ss:NamedCell/@ss:Name='month_begin']/format-number(., '00'))
                     else ''"/>
                 <xsl:variable name="day-begin"
-                    select="if (following-sibling::ss:Cell[ss:NamedCell/@ss:Name='day_begin'])
+                    select="if (following-sibling::ss:Cell[ss:NamedCell/@ss:Name='day_begin'][ss:Data])
                     then concat('-', following-sibling::ss:Cell[ss:NamedCell/@ss:Name='day_begin']/format-number(., '00'))
                     else ''"/>
                 <xsl:variable name="year-end"
                     select="if (following-sibling::ss:Cell[ss:NamedCell/@ss:Name='year_end'][ss:Data/@ss:Type='DateTime'])
                     then following-sibling::ss:Cell[ss:NamedCell/@ss:Name='year_end']/ss:Data/year-from-dateTime(.)    
-                    else if (following-sibling::ss:Cell[ss:NamedCell/@ss:Name='year_end']) 
+                    else if (following-sibling::ss:Cell[ss:NamedCell/@ss:Name='year_end'][ss:Data]) 
                     then following-sibling::ss:Cell[ss:NamedCell/@ss:Name='year_end']/format-number(., '0000')
                     else ''"/>
                 <xsl:variable name="month-end"
-                    select="if (following-sibling::ss:Cell[ss:NamedCell/@ss:Name='month_end'])
+                    select="if (following-sibling::ss:Cell[ss:NamedCell/@ss:Name='month_end'][ss:Data])
                     then concat('-', following-sibling::ss:Cell[ss:NamedCell/@ss:Name='month_end']/format-number(., '00'))
                     else ''"/>
                 <xsl:variable name="day-end"
-                    select="if (following-sibling::ss:Cell[ss:NamedCell/@ss:Name='day_end'])
+                    select="if (following-sibling::ss:Cell[ss:NamedCell/@ss:Name='day_end'][ss:Data])
                     then concat('-', following-sibling::ss:Cell[ss:NamedCell/@ss:Name='day_end']/format-number(., '00'))
                     else ''"/>
                 <unitdate type="inclusive">
-                    <xsl:attribute name="normal">
-                        <xsl:choose>
-                            <xsl:when
-                                test="concat($year-begin, $month-begin, $day-begin) eq concat($year-end, $month-end, $day-end) 
+                    <xsl:if test="$year-begin ne ''">
+                        <xsl:attribute name="normal">
+                            <xsl:choose>
+                                <xsl:when
+                                    test="concat($year-begin, $month-begin, $day-begin) eq concat($year-end, $month-end, $day-end) 
                                 or boolean($year-end) eq false()">
-                                <xsl:value-of select="concat($year-begin, $month-begin, $day-begin)"
-                                />
-                            </xsl:when>
-                            <xsl:otherwise>
-                                <xsl:value-of
-                                    select="concat($year-begin, $month-begin, $day-begin, '/', $year-end, $month-end, $day-end)"
-                                />
-                            </xsl:otherwise>
-                        </xsl:choose>
-                    </xsl:attribute>
+                                    <xsl:value-of
+                                        select="concat($year-begin, $month-begin, $day-begin)"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:value-of
+                                        select="concat($year-begin, $month-begin, $day-begin, '/', $year-end, $month-end, $day-end)"
+                                    />
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </xsl:attribute>
+                    </xsl:if>
                     <xsl:value-of select="."/>
                 </unitdate>
             </xsl:when>
-            <xsl:when test="$column-number eq 6">                
+            <xsl:when test="$column-number eq 6">
                 <xsl:variable name="year-begin"
                     select="if (ss:Data[@ss:Type='DateTime'])
                     then ss:Data/year-from-dateTime(.)    
@@ -435,7 +441,8 @@
             <xsl:when test="$column-number eq 12">
                 <!--added [ss:Data] to the XPath since if you copy and paste a column of Data into Excel,  Excel will export a ss:Cell...  but
                      that cell won't have any ss:Data.  this will ensure that the empty sequence (in the else statement) is supplied-->
-                <xsl:variable name="bulk-year-begin" select="if (ss:Data) then format-number(., '0000') else ''"/>
+                <xsl:variable name="bulk-year-begin"
+                    select="if (ss:Data) then format-number(., '0000') else ''"/>
                 <xsl:variable name="bulk-month-begin"
                     select="if (following-sibling::ss:Cell[ss:NamedCell/@ss:Name='bulk_month_begin'][ss:Data])
                     then concat('-', following-sibling::ss:Cell[ss:NamedCell/@ss:Name='bulk_month_begin']/format-number(., '00'))
@@ -555,38 +562,38 @@
             </xsl:when>
             <xsl:when test="$column-number eq 29">
                 <origination>
-                   <xsl:choose>
-                       <xsl:when
-                           test="
+                    <xsl:choose>
+                        <xsl:when
+                            test="
                            key('style-ids_match-for-color', $style-id)/ss:Font/@ss:Color='#0070C0' 
                            and 
                            not(ss:Data/html:Font/@html:Color='#0070C0')">
-                           <corpname>
-                               <xsl:apply-templates/>
-                           </corpname>
-                       </xsl:when>
-                       <xsl:when
-                           test="
+                            <corpname>
+                                <xsl:apply-templates/>
+                            </corpname>
+                        </xsl:when>
+                        <xsl:when
+                            test="
                            key('style-ids_match-for-color', $style-id)/ss:Font/@ss:Color='#7030A0' 
                            and 
                            not(ss:Data/html:Font/@html:Color='#7030A0')">
-                           <persname>
-                               <xsl:apply-templates/>
-                           </persname>
-                       </xsl:when>
-                       <xsl:when
-                           test="
+                            <persname>
+                                <xsl:apply-templates/>
+                            </persname>
+                        </xsl:when>
+                        <xsl:when
+                            test="
                            key('style-ids_match-for-color', $style-id)/ss:Font/@ss:Color='#ED7D31' 
                            and 
                            not(ss:Data/html:Font/@html:Color='#ED7D31')">
-                           <famname>
-                               <xsl:apply-templates/>
-                           </famname>
-                       </xsl:when>
-                       <xsl:otherwise>
-                           <xsl:apply-templates/>
-                       </xsl:otherwise>
-                   </xsl:choose>
+                            <famname>
+                                <xsl:apply-templates/>
+                            </famname>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:apply-templates/>
+                        </xsl:otherwise>
+                    </xsl:choose>
                 </origination>
             </xsl:when>
             <xsl:when test="$column-number eq 35">
@@ -636,7 +643,8 @@
             <xsl:otherwise>
                 <xsl:element name="{$element-name}" namespace="urn:isbn:1-931666-22-9">
                     <xsl:apply-templates>
-                        <xsl:with-param name="column-number" select="$column-number" as="xs:integer"/>
+                        <xsl:with-param name="column-number" select="$column-number" as="xs:integer"
+                        />
                     </xsl:apply-templates>
                 </xsl:element>
             </xsl:otherwise>
@@ -664,15 +672,15 @@
                     </name>
                 </indexentry>
             </xsl:when>
-            
+
             <!-- controlaccess stuff (to fix later)-->
             <xsl:when test="number($column-number) = (52)">
                 <xsl:apply-templates select="*[normalize-space()]">
-                        <xsl:with-param name="column-number" select="$column-number"/>
-                    </xsl:apply-templates>
+                    <xsl:with-param name="column-number" select="$column-number"/>
+                </xsl:apply-templates>
             </xsl:when>
-          
-            
+
+
             <xsl:when test="number($column-number) = (30 to 34, 36, 39 to 48, 50, 51)">
                 <p>
                     <xsl:apply-templates/>
@@ -781,7 +789,7 @@
             <xsl:apply-templates/>
         </head>
     </xsl:template>
-    
+
     <xsl:template match="*:Font[@html:Color='#0070C0']">
         <corpname>
             <xsl:apply-templates/>
