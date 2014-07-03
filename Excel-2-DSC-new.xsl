@@ -395,7 +395,7 @@
                 <xsl:variable name="year-begin"
                     select="if (ss:Data[@ss:Type='DateTime'])
                     then ss:Data/year-from-dateTime(.)    
-                    else if (ss:Date[not(@ss:Type)]) then format-number(ss:Data, '0000')
+                    else if (ss:Data[not(@ss:Type='DateTime')]) then format-number(ss:Data, '0000')
                     else ''"/>
                 <xsl:variable name="month-begin"
                     select="if (following-sibling::ss:Cell[ss:NamedCell/@ss:Name='month_begin'][ss:Data])
