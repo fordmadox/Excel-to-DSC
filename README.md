@@ -10,5 +10,6 @@ To get started:
 
 Or, to convert an EAD file to Excel:
 * transform your EAD file(s) with the "DSC-to-Excel" XSLT stylesheet
-* Open the ***-excel.xml file(s) with Excel
-* Note that there's a third worksheet in your spreadsheet.  If you'd like the collection-level infomration to be merged with your newly-edited container list upon converting the Excel file back into EAD, just make sure that the original EAD file is still available in the same directory and has a filename that is equal to its "eadid" value.
+* Open the output XML file(s) with Excel
+* Edit, sort, and add to the file as needed (you can keep it in the XML format without having to save it as an .xlsx file)
+* Note that there's a third worksheet in your spreadsheet. If you'd like the collection-level infomration to be merged with your newly-edited container list upon converting the Excel file back into EAD, just make sure that the original EAD file is still available in the same directory and has a filename that is equal to its "eadid" value.
