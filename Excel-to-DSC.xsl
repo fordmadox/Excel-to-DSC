@@ -410,10 +410,20 @@ recheck how origination names are parsed (multiples AND font colors)
                         </xsl:when>
                         <xsl:when
                             test="
+                            key('style-ids_match-for-color', $style-id)/ss:Font/@ss:Color = '#FF0000'
+                            and
+                            not(ss:Data//html:Font/@html:Color = '#FF0000')
+                            and key('style-ids_match-for-color', $style-id)/ss:Font/@ss:Italic">
+                            <title render="italic">
+                                <xsl:apply-templates/>
+                            </title>
+                        </xsl:when>
+                        <xsl:when
+                            test="
                                 key('style-ids_match-for-color', $style-id)/ss:Font/@ss:Color = '#FF0000'
                                 and
                                 not(ss:Data//html:Font/@html:Color = '#FF0000')">
-                            <title render="italic">
+                            <title>
                                 <xsl:apply-templates/>
                             </title>
                         </xsl:when>
@@ -1156,7 +1166,7 @@ recheck how origination names are parsed (multiples AND font colors)
                 </title>
             </xsl:when>
             <xsl:otherwise>
-                <title render="italic">
+                <title>
                     <xsl:apply-templates/>
                 </title>
             </xsl:otherwise>
