@@ -871,7 +871,7 @@
                         <NamedCell ss:Name="_FilterDatabase"/>
                     </Cell>
                     <Cell>
-                        <Data ss:Type="String" xmlns="http://www.w3.org/TR/REC-html40">title</Data>
+                        <Data ss:Type="String">title</Data>
                         <NamedCell ss:Name="_FilterDatabase"/>
                     </Cell>
                     <Cell>
