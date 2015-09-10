@@ -90,7 +90,7 @@
             <xsl:sequence select="ead:did/*[normalize-space()][not(self::ead:container)][not(self::ead:unitdate[@type='bulk'])][not(self::ead:physdesc[ead:extent[1]/matches(., '^\d')])][local-name() = following-sibling::*[normalize-space()]/local-name()]/local-name()"/>
         </xsl:variable>
         <xsl:variable name="non-did-items" as="item()*">
-            <xsl:sequence select="ead:*[normalize-space()][. != (c, c01, c02, c03, c04, c05, c06, c07, c08, c09, c10, c11, c12)][local-name() = following-sibling::*[normalize-space()]/local-name()]/local-name()"/>
+            <xsl:sequence select="ead:*[normalize-space()][not(local-name() = ('c', 'c01', 'c02', 'c03', 'c04', 'c05', 'c06', 'c07', 'c08', 'c09', 'c10', 'c11', 'c12'))][local-name() = following-sibling::*[normalize-space()]/local-name()]/local-name()"/>
         </xsl:variable>
         <xsl:variable name="depths" as="item()*">
             <xsl:sequence select="
@@ -792,6 +792,7 @@
         <xsl:text disable-output-escaping="yes">&amp;#10;</xsl:text>
     </xsl:template>
     
+    <!--pre process to remove any unnnecessary headers added by ASpace (e.g. Scope and Contents note)-->
     <xsl:template match="ead:head">
         <html:Font html:Size="14">
             <xsl:apply-templates/>
