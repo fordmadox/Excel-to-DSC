@@ -347,7 +347,7 @@ recheck how origination names are parsed (multiples AND font colors)
             </xsl:when>
             <!-- in other words, column 5 isn't entirely blank (it has a Cell, but it doesn't have any Data), so we just use column 6 -->
             <!-- recheck this rule!!!! -->
-            <xsl:when test="$column-number eq 6 and ss:NamedCell[@ss:name = 'year_begin']">
+            <xsl:when test="$column-number eq 6 and ss:NamedCell[@ss:Name = 'year_begin']">
                 <xsl:call-template name="did-stuff">
                     <xsl:with-param name="column-number" select="$column-number" as="xs:integer"/>
                     <xsl:with-param name="style-id" select="$style-id"/>
