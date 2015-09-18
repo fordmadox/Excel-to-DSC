@@ -535,7 +535,10 @@ recheck how origination names are parsed (multiples AND font colors)
                     <xsl:value-of select="."/>
                 </unitdate>
             </xsl:when>
-            <xsl:when test="$column-number eq 6">
+            <xsl:when test="$column-number eq 6 and 
+                (not(preceding-sibling::ss:Cell[1][not(@ss:Index)]/ss:Data/text())
+                or preceding-sibling::ss:Cell[1]/xs:integer(@ss:Index) eq 5)">
+                <!-- fix (i should add a name to th -->
                 <xsl:variable name="year-begin"
                     select="
                         if (ss:Data[@ss:Type = 'DateTime'])
@@ -1033,7 +1036,11 @@ recheck how origination names are parsed (multiples AND font colors)
             <xsl:apply-templates/>
         </emph>
     </xsl:template>
-
+    
+    
+    <!-- also need to account for this, though:
+        <I><Font html:Color="#000000">See also</Font></I> 
+    -->
     <xsl:template match="html:I[not(*)]">
         <emph render="italic">
             <xsl:apply-templates/>
