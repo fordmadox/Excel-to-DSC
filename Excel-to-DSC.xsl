@@ -588,23 +588,33 @@ recheck how origination names are parsed (multiples AND font colors)
                             concat('-', following-sibling::ss:Cell[ss:NamedCell/@ss:Name = 'day_end']/format-number(., '00'))
                         else
                             ''"/>
+                <xsl:variable name="date-value">
+                    <xsl:choose>
+                        <xsl:when
+                            test="
+                            concat($year-begin, $month-begin, $day-begin) eq concat($year-end, $month-end, $day-end)
+                            or boolean($year-end) eq false()">
+                            <xsl:value-of select="concat($year-begin, $month-begin, $day-begin)"
+                            />
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:value-of
+                                select="concat($year-begin, $month-begin, $day-begin, '/', $year-end, $month-end, $day-end)"
+                            />
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:variable>
                 <unitdate type="inclusive">
                     <xsl:attribute name="normal">
-                        <xsl:choose>
-                            <xsl:when
-                                test="
-                                    concat($year-begin, $month-begin, $day-begin) eq concat($year-end, $month-end, $day-end)
-                                    or boolean($year-end) eq false()">
-                                <xsl:value-of select="concat($year-begin, $month-begin, $day-begin)"
-                                />
-                            </xsl:when>
-                            <xsl:otherwise>
-                                <xsl:value-of
-                                    select="concat($year-begin, $month-begin, $day-begin, '/', $year-end, $month-end, $day-end)"
-                                />
-                            </xsl:otherwise>
-                        </xsl:choose>
+                        <xsl:value-of select="$date-value"/>
                     </xsl:attribute>
+                    <!-- this shouldn't be required, but ASpace's EAD importer with version 1.3 has a bug in it
+                        that results in values like "1912-1912" if you leave a date expression out!!! 
+                      (in fact, rather than do this in this transformation, I'll add a second transformation that will add in the 
+                      text nodes if those are missing.  That shouldn't be necessary, but until we can update the EAD importer, we'll need to 
+                      do just that)
+                    <xsl:value-of select="translate($date-value, '/', '-')"/>
+                    -->
                 </unitdate>
             </xsl:when>
 
