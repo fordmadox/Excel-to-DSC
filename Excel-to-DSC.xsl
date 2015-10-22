@@ -841,7 +841,7 @@ recheck how origination names are parsed (multiples AND font colors)
 
             <xsl:when test="$column-number eq 39">
                 <langmaterial>
-                    <language langcode="{.}"/>
+                    <language langcode="{if (contains(., '-')) then substring-before(., ' -') else .}"/>
                 </langmaterial>
             </xsl:when>
 
