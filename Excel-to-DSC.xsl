@@ -536,9 +536,9 @@ recheck how origination names are parsed (multiples AND font colors)
                 </unitdate>
             </xsl:when>
             <xsl:when test="$column-number eq 6 and 
-                (not(preceding-sibling::ss:Cell[1][not(@ss:Index)]/ss:Data/text())
-                or preceding-sibling::ss:Cell[1]/xs:integer(@ss:Index) eq 5)">
-                <!-- fix (i should add a name to th -->
+                not(preceding-sibling::ss:Cell[1]/xs:integer(@ss:Index) eq 5">
+                <!-- fix (i should add a name to the date experssion column)
+                i also need to fix this xpath statement to work when blank data shows up-->
                 <xsl:variable name="year-begin"
                     select="
                         if (ss:Data[@ss:Type = 'DateTime'])
