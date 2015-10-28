@@ -536,7 +536,7 @@ recheck how origination names are parsed (multiples AND font colors)
                 </unitdate>
             </xsl:when>
             <xsl:when test="$column-number eq 6 and 
-                        not(preceding-sibling::ss:Cell[1][ss:Date/text()]/NamedCell[@ss:Name='date_expression'])">
+                not(preceding-sibling::ss:Cell[1][ss:Data/normalize-space()]/ss:NamedCell[@ss:Name='date_expression'])">
                 <xsl:variable name="year-begin"
                     select="
                         if (ss:Data[@ss:Type = 'DateTime'])
