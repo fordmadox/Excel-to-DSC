@@ -214,6 +214,7 @@
                         select="ead:did/ead:unitdate[not(@type = 'bulk')][position() eq $current-position]"/>
                     <!--any repeating unidate values will be copied into the immediate following rows-->
                 </Data>
+                <NamedCell ss:Name="date_expression"/>
             </Cell>
             <!-- column 6 -->
             <Cell ss:StyleID="s3">
@@ -1248,6 +1249,7 @@
                 <NamedRange ss:Name="month_end" ss:RefersTo="=ContainerList!C10"/>
                 <NamedRange ss:Name="year_begin" ss:RefersTo="=ContainerList!C6"/>
                 <NamedRange ss:Name="year_end" ss:RefersTo="=ContainerList!C9"/>
+                <NamedRange ss:Name="date_expression" ss:RefersTo="=ContainerList!C5"/>
             </Names>
 
             <!-- 1st worksheet is created by the description in the DSC-->
