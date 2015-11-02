@@ -955,6 +955,13 @@ recheck how origination names are parsed (multiples AND font colors)
                 </p>
             </xsl:when>
             
+            <xsl:when test="starts-with(text()[1], '&#10;') and html:Font[1]/@html:Size eq '14'">
+                <xsl:apply-templates select="*[1]"/>
+                <p>
+                    <xsl:apply-templates select="node() except *[1]"/>
+                </p>
+            </xsl:when>  
+            
             <xsl:when test="key('style-ids_match-for-color', $style-id)/ss:Font/@ss:Size eq '14' 
                 and html:Font[@html:Size='11'][1]/starts-with(., '&#10;')
                 and not(html:Font[1]/@html:Size eq '14')">
