@@ -772,7 +772,10 @@ recheck how origination names are parsed (multiples AND font colors)
                         <xsl:value-of
                             select="
                                 if ($extent-number castable as xs:double) then
-                                    concat(format-number($extent-number, '#.##'), ' ', .)
+                                    concat(format-number($extent-number, '#.##'), ' ', .) 
+                                else
+                                if ($extent-number ne 'noextent') then
+                                    concat($extent-number, ' ', .)
                                 else
                                     '0 See container summary'"
                         />
