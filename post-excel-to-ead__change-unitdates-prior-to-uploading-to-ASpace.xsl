@@ -50,7 +50,7 @@
         </xsl:copy>
     </xsl:template>
     
-    <xsl:template match="ead:unitdate[@type ne 'bulk'] | ead:unitdate[not(@type)]" priority="2">
+    <xsl:template match="ead:unitdate[@type ne 'bulk']" priority="2">
         <xsl:copy>
             <xsl:copy-of select="@*"/>
             <xsl:choose>
