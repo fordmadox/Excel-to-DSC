@@ -50,7 +50,7 @@
         </xsl:copy>
     </xsl:template>
     
-    <xsl:template match="ead:unitdate[@type ne 'bulk']" priority="2">
+    <xsl:template match="ead:unitdate[@type ne 'bulk'] | ead:unitdate[not(@type)]" priority="2">
         <xsl:copy>
             <xsl:copy-of select="@*"/>
             <xsl:choose>
@@ -58,7 +58,7 @@
                     <xsl:apply-templates/>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:variable name="first-date" select="if (contains(@normal, '/')) then replace(substring-before(@normal, '/'), '\D', '') else @normal"/>
+                    <xsl:variable name="first-date" select="if (contains(@normal, '/')) then replace(substring-before(@normal, '/'), '\D', '') else replace(@normal, '\D', '')"/>
                     <xsl:variable name="second-date" select="replace(substring-after(@normal, '/'), '\D', '')"/>
                     <!-- just adding the next line until i write a date conversion function-->
                     <xsl:value-of select="mdc:iso-date-2-display-form($first-date)"/>
@@ -81,7 +81,7 @@
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:text>Bulk, </xsl:text>
-                    <xsl:variable name="first-date" select="if (contains(@normal, '/')) then replace(substring-before(@normal, '/'), '\D', '') else @normal"/>
+                    <xsl:variable name="first-date" select="if (contains(@normal, '/')) then replace(substring-before(@normal, '/'), '\D', '') else replace(@normal, '\D', '')"/>
                     <xsl:variable name="second-date" select="replace(substring-after(@normal, '/'), '\D', '')"/>
                     <xsl:value-of select="mdc:iso-date-2-display-form($first-date)"/>
                     <xsl:if test="$second-date ne '' and ($first-date ne $second-date)">
