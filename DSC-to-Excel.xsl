@@ -17,6 +17,7 @@
         </xd:desc>
     </xd:doc>
     <xsl:output method="xml" encoding="UTF-8"/>
+    <xsl:strip-space elements="*"/>
 
     <!--
         to do:
