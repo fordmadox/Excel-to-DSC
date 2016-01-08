@@ -45,6 +45,7 @@ recheck how origination names are parsed (multiples AND font colors)
 
     <xsl:output method="xml" indent="yes" encoding="UTF-8"/>
     <xsl:strip-space elements="*"/>
+    <xsl:preserve-space elements="*:Data *:Font"/>
     <!--   (1 - 55 / A - BC), columns in Excel
         1   - level number (no default..  requires at least one level-1 value; level-0 values are used for repeating values wihtin the same component; e.g. multiple unitdate expressions)
         2   - level type  (if no value, the level will = "file")
@@ -1203,7 +1204,7 @@ recheck how origination names are parsed (multiples AND font colors)
         <xsl:choose>
             <xsl:when test="contains(., '&#10;&#10;')">
                 <xsl:for-each select="tokenize(., '&#10;&#10;')">
-                    <xsl:value-of select="normalize-space(.)"/>
+                    <xsl:value-of select="."/>
                     <xsl:if test="position() ne last()">
                         <xsl:text disable-output-escaping="yes">&lt;/p&gt;
                             &lt;p&gt;</xsl:text>
