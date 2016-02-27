@@ -121,6 +121,8 @@ recheck how origination names are parsed (multiples AND font colors)
          - bibliography
          - fileplan
          - index
+         - odd (though I should add this somewhere)
+         - note
          - @role (in origination/* elements)
          - @script 
          - and a whole lot of other attributes, like @calendar, @certainty, etc.!
@@ -948,6 +950,13 @@ recheck how origination names are parsed (multiples AND font colors)
         <xsl:param name="column-number"/>
         <xsl:param name="style-id"/>
         <xsl:choose>
+            <!-- controlaccess stuff -->
+            <xsl:when test="number($column-number) = (52)">
+                <xsl:apply-templates select="*[normalize-space()]">
+                    <xsl:with-param name="column-number" select="$column-number"/>
+                </xsl:apply-templates>
+            </xsl:when>
+            
             <!-- hack way to deal with adding <head> elements for scope and content and other types of notes.-->
             <!-- also gotta check style ids, since if you re-save an Excel file, it'll strip the font element out and replace it with an ID :( -->
             <xsl:when test="starts-with(*[2], '&#10;') and not(html:Font[1]/@html:Size eq '14')">
@@ -982,13 +991,6 @@ recheck how origination names are parsed (multiples AND font colors)
                 <p>
                     <xsl:apply-templates select="node() except text()[1]"/>
                 </p>
-            </xsl:when>
-
-            <!-- controlaccess stuff -->
-            <xsl:when test="number($column-number) = (52)">
-                <xsl:apply-templates select="*[normalize-space()]">
-                    <xsl:with-param name="column-number" select="$column-number"/>
-                </xsl:apply-templates>
             </xsl:when>
 
             <!-- 32 to 36, 38, 41 to 52 -->
