@@ -28,15 +28,17 @@ recheck how origination names are parsed (multiples AND font colors)
           
         -->
     <xsl:key name="style-ids_match-for-color" match="ss:Style" use="@ss:ID"/>
-    <!-- will probably want to change how this works, but right now you can create mixed content with the following font colors (which results in a pretty hideous rainbow):  
+    <!-- will probably want to change how this works, but right now you can create mixed content with the following font colors (which results in a pretty hideous rainbow):
+        (when there's a second color, that's to deal with the issue of 
+        converting a file from XML to XLSX, at which point MS Excel changes the color)
         #FF0000 = title
-        #0070C0 = corpname
-        #7030A0 = persname
-        #ED7D31 = famname
-        #44546A = geogname
-        #00B050 = genreform     
-        #00B0F0 = subject
-        #FFC000 = occupation
+        #0070C0, #0066CC = corpname
+        #7030A0, #666699 = persname  e.g. =('#666699', '#7030A0')
+        #ED7D31, #FF6600 = famname
+        #44546A, #339966 = geogname
+        #00B050, #008080 = genreform     
+        #00B0F0, #00CCFF = subject
+        #FFC000, #FFCC00 = occupation
         #FF00FF = function
         #000000 = name, but only in the controlaccess column.
         
@@ -432,27 +434,27 @@ recheck how origination names are parsed (multiples AND font colors)
                         </xsl:when>
                         <xsl:when
                             test="
-                                key('style-ids_match-for-color', $style-id)/ss:Font/@ss:Color = '#0070C0'
+                                key('style-ids_match-for-color', $style-id)/ss:Font/@ss:Color = ('#0070C0', '#0066CC')
                                 and
-                                not(ss:Data//html:Font/@html:Color = '#0070C0')">
+                                not(ss:Data//html:Font/@html:Color = ('#0070C0', '#0066CC'))">
                             <corpname>
                                 <xsl:apply-templates/>
                             </corpname>
                         </xsl:when>
                         <xsl:when
                             test="
-                                key('style-ids_match-for-color', $style-id)/ss:Font/@ss:Color = '#7030A0'
+                            key('style-ids_match-for-color', $style-id)/ss:Font/@ss:Color = ('#666699', '#7030A0')
                                 and
-                                not(ss:Data//html:Font/@html:Color = '#7030A0')">
+                                not(ss:Data//html:Font/@html:Color = ('#666699', '#7030A0'))">
                             <persname>
                                 <xsl:apply-templates/>
                             </persname>
                         </xsl:when>
                         <xsl:when
                             test="
-                                key('style-ids_match-for-color', $style-id)/ss:Font/@ss:Color = '#ED7D31'
+                                key('style-ids_match-for-color', $style-id)/ss:Font/@ss:Color = ('#ED7D31', '#FF6600')
                                 and
-                                not(ss:Data//html:Font/@html:Color = '#ED7D31')">
+                                not(ss:Data//html:Font/@html:Color = ('#ED7D31', '#FF6600'))">
                             <famname>
                                 <xsl:apply-templates/>
                             </famname>
@@ -805,27 +807,27 @@ recheck how origination names are parsed (multiples AND font colors)
                     <xsl:choose>
                         <xsl:when
                             test="
-                                key('style-ids_match-for-color', $style-id)/ss:Font/@ss:Color = '#0070C0'
+                                key('style-ids_match-for-color', $style-id)/ss:Font/@ss:Color = ('#0070C0', '#0066CC')
                                 and
-                                not(ss:Data/html:Font/@html:Color = '#0070C0')">
+                                not(ss:Data/html:Font/@html:Color = ('#0070C0', '#0066CC'))">
                             <corpname>
                                 <xsl:apply-templates/>
                             </corpname>
                         </xsl:when>
                         <xsl:when
                             test="
-                                key('style-ids_match-for-color', $style-id)/ss:Font/@ss:Color = '#7030A0'
+                            key('style-ids_match-for-color', $style-id)/ss:Font/@ss:Color = ('#666699', '#7030A0')
                                 and
-                                not(ss:Data/html:Font/@html:Color = '#7030A0')">
+                                not(ss:Data/html:Font/@html:Color = ('#666699', '#7030A0'))">
                             <persname>
                                 <xsl:apply-templates/>
                             </persname>
                         </xsl:when>
                         <xsl:when
                             test="
-                                key('style-ids_match-for-color', $style-id)/ss:Font/@ss:Color = '#ED7D31'
+                                key('style-ids_match-for-color', $style-id)/ss:Font/@ss:Color = ('#ED7D31', '#FF6600')
                                 and
-                                not(ss:Data/html:Font/@html:Color = '#ED7D31')">
+                                not(ss:Data/html:Font/@html:Color = ('#ED7D31', '#FF6600'))">
                             <famname>
                                 <xsl:apply-templates/>
                             </famname>
@@ -1111,37 +1113,37 @@ recheck how origination names are parsed (multiples AND font colors)
         </head>
     </xsl:template>
 
-    <xsl:template match="*:Font[@html:Color = '#0070C0']">
+    <xsl:template match="*:Font[@html:Color = ('#0070C0', '#0066CC')]">
         <corpname>
             <xsl:apply-templates/>
         </corpname>
     </xsl:template>
-    <xsl:template match="*:Font[@html:Color = '#7030A0']">
+    <xsl:template match="*:Font[@html:Color = ('#666699', '#7030A0')]">
         <persname>
             <xsl:apply-templates/>
         </persname>
     </xsl:template>
-    <xsl:template match="*:Font[@html:Color = '#ED7D31']">
+    <xsl:template match="*:Font[@html:Color = ('#ED7D31', '#FF6600')]">
         <famname>
             <xsl:apply-templates/>
         </famname>
     </xsl:template>
-    <xsl:template match="*:Font[@html:Color = '#44546A']">
+    <xsl:template match="*:Font[@html:Color = ('#44546A', '#339966')]">
         <geogname>
             <xsl:apply-templates/>
         </geogname>
     </xsl:template>
-    <xsl:template match="*:Font[@html:Color = '#00B050']">
+    <xsl:template match="*:Font[@html:Color = ('#00B050', '#008080')]">
         <genreform>
             <xsl:apply-templates/>
         </genreform>
     </xsl:template>
-    <xsl:template match="*:Font[@html:Color = '#00B0F0']">
+    <xsl:template match="*:Font[@html:Color = ('#00B0F0', '#00CCFF')]">
         <subject>
             <xsl:apply-templates/>
         </subject>
     </xsl:template>
-    <xsl:template match="*:Font[@html:Color = '#FFC000']">
+    <xsl:template match="*:Font[@html:Color = ('#FFC000', '#FFCC00')]">
         <occupation>
             <xsl:apply-templates/>
         </occupation>
