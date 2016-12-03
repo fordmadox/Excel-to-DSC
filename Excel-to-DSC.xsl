@@ -952,11 +952,46 @@ recheck how origination names are parsed (multiples AND font colors)
         <xsl:param name="column-number"/>
         <xsl:param name="style-id"/>
         <xsl:choose>
-            <!-- controlaccess stuff -->
-            <xsl:when test="number($column-number) = (52)">
+            <!-- controlaccess stuff, when sub-elements like Font are present -->
+            <xsl:when test="number($column-number) = (52) and *">
                 <xsl:apply-templates select="*[normalize-space()]">
                     <xsl:with-param name="column-number" select="$column-number"/>
                 </xsl:apply-templates>
+            </xsl:when>
+            
+            <xsl:when test="number($column-number) = (52) and not(*)">
+                <xsl:choose>
+                    <xsl:when
+                        test="
+                        key('style-ids_match-for-color', $style-id)/ss:Font/@ss:Color = ('#0070C0', '#0066CC')
+                        and
+                        not(ss:Data/html:Font/@html:Color = ('#0070C0', '#0066CC'))">
+                        <corpname>
+                            <xsl:apply-templates/>
+                        </corpname>
+                    </xsl:when>
+                    <xsl:when
+                        test="
+                        key('style-ids_match-for-color', $style-id)/ss:Font/@ss:Color = ('#666699', '#7030A0')
+                        and
+                        not(ss:Data/html:Font/@html:Color = ('#666699', '#7030A0'))">
+                        <persname>
+                            <xsl:apply-templates/>
+                        </persname>
+                    </xsl:when>
+                    <xsl:when
+                        test="
+                        key('style-ids_match-for-color', $style-id)/ss:Font/@ss:Color = ('#ED7D31', '#FF6600')
+                        and
+                        not(ss:Data/html:Font/@html:Color = ('#ED7D31', '#FF6600'))">
+                        <famname>
+                            <xsl:apply-templates/>
+                        </famname>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:apply-templates/>
+                    </xsl:otherwise>
+                </xsl:choose>
             </xsl:when>
             
             <!-- hack way to deal with adding <head> elements for scope and content and other types of notes.-->
