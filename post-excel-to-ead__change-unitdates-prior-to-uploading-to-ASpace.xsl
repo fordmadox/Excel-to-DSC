@@ -93,4 +93,8 @@
         </xsl:copy>
     </xsl:template>
     
+    <xsl:template match="ead:container/@label">
+        <xsl:value-of select="translate(., '[]', '()')"/>
+    </xsl:template>
+    
 </xsl:stylesheet>

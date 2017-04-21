@@ -693,7 +693,7 @@ recheck how origination names are parsed (multiples AND font colors)
                         then
                             preceding-sibling::ss:Cell[ss:NamedCell/@ss:Name = 'instance_type']/ss:Data
                         else
-                            'Mixed materials'"/>
+                            'mixed_materials'"/>
                 <xsl:variable name="barcode"
                     select="preceding-sibling::ss:Cell[ss:NamedCell/@ss:Name = 'barcode']/ss:Data"/>
 
@@ -702,7 +702,7 @@ recheck how origination names are parsed (multiples AND font colors)
                         <xsl:value-of
                             select="
                                 if ($barcode ne '') then
-                                    concat($instance_type, ' [', $barcode, ']')
+                                    concat($instance_type, ' (', $barcode, ')')
                                 else
                                     $instance_type"
                         />
