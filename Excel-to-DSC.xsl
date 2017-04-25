@@ -8,11 +8,11 @@
     xmlns:html="http://www.w3.org/TR/REC-html40" xmlns:xlink="http://www.w3.org/1999/xlink"
     xmlns:ead="urn:isbn:1-931666-22-9" xmlns:mdc="http://mdc" xmlns="urn:isbn:1-931666-22-9"
     xpath-default-namespace="urn:isbn:1-931666-22-9"
-    exclude-result-prefixes="xs math xd o x ss html xlink ead mdc" version="2.0">
+    exclude-result-prefixes="xs math xd o x ss html xlink ead mdc" version="3.0">
     <xd:doc scope="stylesheet">
         <xd:desc>
             <xd:p><xd:b>Created on:</xd:b> December 19, 2013</xd:p>
-            <xd:p><xd:b>Significantly revised on:</xd:b> August 2, 2015</xd:p>
+            <xd:p><xd:b>Significantly revised on:</xd:b> April 23, 2017</xd:p>
             <xd:p><xd:b>Author:</xd:b> Mark Custer</xd:p>
             <xd:p>tested with Saxon-HE 9.6.0.5</xd:p>
         </xd:desc>
@@ -160,7 +160,7 @@ recheck how origination names are parsed (multiples AND font colors)
 
     <xsl:template match="ss:Workbook">
         <xsl:param name="workbook" select="." as="node()"/>
-                <xsl:choose>
+        <xsl:choose>
             <xsl:when test="$ead-copy-filename ne ''">
                 <xsl:for-each select="document($ead-copy-filename)">
                     <xsl:apply-templates select="@* | node()" mode="ead-copy">
@@ -168,8 +168,9 @@ recheck how origination names are parsed (multiples AND font colors)
                     </xsl:apply-templates>
                 </xsl:for-each>
             </xsl:when>
-            <xsl:otherwise>    
-                <ead xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:isbn:1-931666-22-9 http://www.loc.gov/ead/ead.xsd">
+            <xsl:otherwise>
+                <ead xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                    xsi:schemaLocation="urn:isbn:1-931666-22-9 http://www.loc.gov/ead/ead.xsd">
                     <eadheader>
                         <eadid/>
                         <filedesc>
@@ -203,7 +204,7 @@ recheck how origination names are parsed (multiples AND font colors)
                     </archdesc>
                 </ead>
             </xsl:otherwise>
-         </xsl:choose>
+        </xsl:choose>
     </xsl:template>
 
     <!-- adding the identity template, so we can use the source EAD files during roundtripping-->
@@ -217,7 +218,8 @@ recheck how origination names are parsed (multiples AND font colors)
         <xsl:param name="workbook" as="node()" tunnel="yes"/>
         <xsl:copy>
             <xsl:apply-templates select="@* | node() except ead:dsc" mode="#current"/>
-            <xsl:apply-templates select="$workbook/ss:Worksheet[@ss:Name = 'ContainerList']/ss:Table"/>
+            <xsl:apply-templates
+                select="$workbook/ss:Worksheet[@ss:Name = 'ContainerList']/ss:Table"/>
         </xsl:copy>
     </xsl:template>
 
@@ -249,9 +251,15 @@ recheck how origination names are parsed (multiples AND font colors)
         <!-- should I add an option to use c elements OR ennumerated components?  this would be simple to do, but it would require a slightly longer style sheet.-->
         <c>
             <xsl:attribute name="level">
-                <xsl:value-of select="if ($level='accession') then 'otherlevel' else $level"/>
+                <xsl:value-of
+                    select="
+                        if ($level = 'accession') then
+                            'otherlevel'
+                        else
+                            $level"
+                />
             </xsl:attribute>
-            <xsl:if test="$level='accession'">
+            <xsl:if test="$level = 'accession'">
                 <xsl:attribute name="otherlevel">
                     <xsl:text>accesssion</xsl:text>
                 </xsl:attribute>
@@ -268,32 +276,75 @@ recheck how origination names are parsed (multiples AND font colors)
             <did>
                 <xsl:apply-templates mode="did"/>
                 <!-- this grabs all of the fields that we allow to repeat via "level 0" in the did node.-->
-                
-                <xsl:apply-templates
-                    select="
-                        following-sibling::ss:Row[ss:Cell[1]/ss:Data[. eq '0']]
-                        except
-                        following-sibling::ss:Row[ss:Cell[1]/ss:Data[. ne '0']]/following-sibling::ss:Row"
-                    mode="did"/>
+                <xsl:if test="following-sibling::ss:Row[1][ss:Cell[1]/ss:Data eq '0']">
+                    <xsl:for-each-group select="following-sibling::ss:Row[ss:Cell/ss:Data]"
+                        group-adjacent="ss:Cell[1]/ss:Data eq '0'">
+                        <xsl:variable name="group-position" select="position()"/>
+                        <xsl:for-each select="current-group()">
+                            <xsl:if test="$group-position eq 1">
+                                <xsl:apply-templates select="." mode="did"/>
+                            </xsl:if>
+                        </xsl:for-each>
+                    </xsl:for-each-group>
+                </xsl:if>
             </did>
             <xsl:apply-templates mode="non-did"/>
 
             <!-- this grabs all of the fields that we allow to repeat via "level 0".-->
-            <xsl:apply-templates
-                select="
-                    following-sibling::ss:Row[ss:Cell[1]/ss:Data[. eq '0']]
-                    except
-                    following-sibling::ss:Row[ss:Cell[1]/ss:Data[. ne '0']]/following-sibling::ss:Row"
-                mode="non-did"/>
+            <xsl:if test="following-sibling::ss:Row[1][ss:Cell[1]/ss:Data eq '0']">
+                <xsl:for-each-group select="following-sibling::ss:Row[ss:Cell/ss:Data]"
+                    group-adjacent="ss:Cell[1]/ss:Data eq '0'">
+                    <xsl:variable name="group-position" select="position()"/>
+                    <xsl:for-each select="current-group()">
+                        <xsl:if test="$group-position eq 1">
+                            <xsl:apply-templates select="." mode="non-did"/>
+                        </xsl:if>
+                    </xsl:for-each>
+                </xsl:for-each-group>
+            </xsl:if>
 
             <!-- there's no validation for this in excel, but it requires that the spreadsheet be ordered with 1, 2, 3, etc.... and never 1, 3, for example. -->
+
+            <!-- I feel like I should be able to do this by group-ending-with the current depth,
+            but i might've messed something up since i couldn't get it to work as expected. -->
             <xsl:if test="$following-depth eq $depth + 1">
-                <xsl:apply-templates
+                <!--
+                    this works, in about 200 seconds, for one of the large test files.  
+                    that's a big improvement, but let's try one more thing.
+                    and it looks like the newest tactic, that doesn't use "except," only takes 2 seconds for a really large file! much better!
+                    
+                <xsl:for-each-group
                     select="
-                        following-sibling::ss:Row[ss:Cell[1]/ss:Data[xs:integer(.) eq $depth + 1][normalize-space()]]
+                        following-sibling::ss:Row[ss:Cell[1]/ss:Data[1][. ne '0']/normalize-space()]
                         except
                         following-sibling::ss:Row[ss:Cell[1]/ss:Data[xs:integer(.) eq $depth]]/following-sibling::ss:Row"
-                />
+                    group-by="ss:Cell[1]/ss:Data[1]/xs:integer(.)">
+                    <xsl:variable name="group-position" select="position()"/>
+                    <xsl:for-each select="current-group()">
+                        <xsl:if test="$group-position eq 1">
+                            <xsl:apply-templates select="."/>
+                        </xsl:if>
+                    </xsl:for-each>
+                </xsl:for-each-group>
+                -->
+                <xsl:variable name="depths-left"
+                    select="following-sibling::ss:Row/ss:Cell[1]/ss:Data[1][. ne '0'][normalize-space()]/xs:integer(.)"/>
+                <xsl:variable name="group-until"
+                    select="
+                        if (following-sibling::ss:Row/ss:Cell[1]/ss:Data[1][xs:integer(.) eq $depth]) then
+                            index-of($depths-left, $depth)[1]
+                        else
+                            index-of($depths-left, $depth + 1)[last()]"/>
+                <xsl:for-each-group
+                    select="subsequence(following-sibling::ss:Row[ss:Cell[1]/ss:Data[1][. ne '0']/normalize-space()], 1, $group-until)"
+                    group-by="ss:Cell[1]/ss:Data[1]/xs:integer(.)">
+                    <xsl:variable name="group-position" select="position()"/>
+                    <xsl:for-each select="current-group()">
+                        <xsl:if test="$group-position eq 1">
+                            <xsl:apply-templates select="."/>
+                        </xsl:if>
+                    </xsl:for-each>
+                </xsl:for-each-group>
             </xsl:if>
         </c>
     </xsl:template>
@@ -371,7 +422,7 @@ recheck how origination names are parsed (multiples AND font colors)
         <xsl:variable name="cells-before-previous-index"
             select="count(preceding-sibling::ss:Cell[@ss:Index][1]/following-sibling::* intersect preceding-sibling::ss:Cell)"/>
         <xsl:variable name="column-number" as="xs:integer">
-            <xsl:value-of 
+            <xsl:value-of
                 select="mdc:get-column-number($position, $current-index, $previous-index, $cells-before-previous-index)"
             />
         </xsl:variable>
@@ -415,10 +466,10 @@ recheck how origination names are parsed (multiples AND font colors)
                         </xsl:when>
                         <xsl:when
                             test="
-                            key('style-ids_match-for-color', $style-id)/ss:Font/@ss:Color = '#FF0000'
-                            and
-                            not(ss:Data//html:Font/@html:Color = '#FF0000')
-                            and key('style-ids_match-for-color', $style-id)/ss:Font/@ss:Italic">
+                                key('style-ids_match-for-color', $style-id)/ss:Font/@ss:Color = '#FF0000'
+                                and
+                                not(ss:Data//html:Font/@html:Color = '#FF0000')
+                                and key('style-ids_match-for-color', $style-id)/ss:Font/@ss:Italic">
                             <title render="italic">
                                 <xsl:apply-templates/>
                             </title>
@@ -443,7 +494,7 @@ recheck how origination names are parsed (multiples AND font colors)
                         </xsl:when>
                         <xsl:when
                             test="
-                            key('style-ids_match-for-color', $style-id)/ss:Font/@ss:Color = ('#666699', '#7030A0')
+                                key('style-ids_match-for-color', $style-id)/ss:Font/@ss:Color = ('#666699', '#7030A0')
                                 and
                                 not(ss:Data//html:Font/@html:Color = ('#666699', '#7030A0'))">
                             <persname>
@@ -540,8 +591,10 @@ recheck how origination names are parsed (multiples AND font colors)
                     <xsl:value-of select="."/>
                 </unitdate>
             </xsl:when>
-            <xsl:when test="$column-number eq 6 and 
-                not(preceding-sibling::ss:Cell[1][ss:Data/normalize-space()]/ss:NamedCell[@ss:Name='date_expression'])">
+            <xsl:when
+                test="
+                    $column-number eq 6 and
+                    not(preceding-sibling::ss:Cell[1][ss:Data/normalize-space()]/ss:NamedCell[@ss:Name = 'date_expression'])">
                 <xsl:variable name="year-begin"
                     select="
                         if (ss:Data[@ss:Type = 'DateTime'])
@@ -595,10 +648,9 @@ recheck how origination names are parsed (multiples AND font colors)
                     <xsl:choose>
                         <xsl:when
                             test="
-                            concat($year-begin, $month-begin, $day-begin) eq concat($year-end, $month-end, $day-end)
-                            or boolean($year-end) eq false()">
-                            <xsl:value-of select="concat($year-begin, $month-begin, $day-begin)"
-                            />
+                                concat($year-begin, $month-begin, $day-begin) eq concat($year-end, $month-end, $day-end)
+                                or boolean($year-end) eq false()">
+                            <xsl:value-of select="concat($year-begin, $month-begin, $day-begin)"/>
                         </xsl:when>
                         <xsl:otherwise>
                             <xsl:value-of
@@ -712,7 +764,7 @@ recheck how origination names are parsed (multiples AND font colors)
                             select="
                                 if (preceding-sibling::ss:Cell[ss:NamedCell/@ss:Name = 'container_1_type'][ss:Data[normalize-space()]])
                                 then
-                                preceding-sibling::ss:Cell[ss:NamedCell/@ss:Name = 'container_1_type']/ss:Data
+                                    preceding-sibling::ss:Cell[ss:NamedCell/@ss:Name = 'container_1_type']/ss:Data
                                 else
                                     'Box'"
                         />
@@ -777,12 +829,12 @@ recheck how origination names are parsed (multiples AND font colors)
                         <xsl:value-of
                             select="
                                 if ($extent-number castable as xs:double) then
-                                    concat(format-number($extent-number, '#.##'), ' ', .) 
+                                    concat(format-number($extent-number, '#.##'), ' ', .)
                                 else
-                                if ($extent-number ne 'noextent') then
-                                    concat($extent-number, ' ', .)
-                                else
-                                    '0 See container summary'"
+                                    if ($extent-number ne 'noextent') then
+                                        concat($extent-number, ' ', .)
+                                    else
+                                        '0 See container summary'"
                         />
                     </extent>
                     <xsl:if
@@ -816,7 +868,7 @@ recheck how origination names are parsed (multiples AND font colors)
                         </xsl:when>
                         <xsl:when
                             test="
-                            key('style-ids_match-for-color', $style-id)/ss:Font/@ss:Color = ('#666699', '#7030A0')
+                                key('style-ids_match-for-color', $style-id)/ss:Font/@ss:Color = ('#666699', '#7030A0')
                                 and
                                 not(ss:Data/html:Font/@html:Color = ('#666699', '#7030A0'))">
                             <persname>
@@ -847,7 +899,8 @@ recheck how origination names are parsed (multiples AND font colors)
 
             <xsl:when test="$column-number eq 39">
                 <langmaterial>
-                    <language langcode="{if (contains(., '-')) then substring-before(., ' -') else .}"/>
+                    <language
+                        langcode="{if (contains(., '-')) then substring-before(., ' -') else .}"/>
                 </langmaterial>
             </xsl:when>
 
@@ -958,32 +1011,32 @@ recheck how origination names are parsed (multiples AND font colors)
                     <xsl:with-param name="column-number" select="$column-number"/>
                 </xsl:apply-templates>
             </xsl:when>
-            
+
             <xsl:when test="number($column-number) = (52) and not(*)">
                 <xsl:choose>
                     <xsl:when
                         test="
-                        key('style-ids_match-for-color', $style-id)/ss:Font/@ss:Color = ('#0070C0', '#0066CC')
-                        and
-                        not(ss:Data/html:Font/@html:Color = ('#0070C0', '#0066CC'))">
+                            key('style-ids_match-for-color', $style-id)/ss:Font/@ss:Color = ('#0070C0', '#0066CC')
+                            and
+                            not(ss:Data/html:Font/@html:Color = ('#0070C0', '#0066CC'))">
                         <corpname>
                             <xsl:apply-templates/>
                         </corpname>
                     </xsl:when>
                     <xsl:when
                         test="
-                        key('style-ids_match-for-color', $style-id)/ss:Font/@ss:Color = ('#666699', '#7030A0')
-                        and
-                        not(ss:Data/html:Font/@html:Color = ('#666699', '#7030A0'))">
+                            key('style-ids_match-for-color', $style-id)/ss:Font/@ss:Color = ('#666699', '#7030A0')
+                            and
+                            not(ss:Data/html:Font/@html:Color = ('#666699', '#7030A0'))">
                         <persname>
                             <xsl:apply-templates/>
                         </persname>
                     </xsl:when>
                     <xsl:when
                         test="
-                        key('style-ids_match-for-color', $style-id)/ss:Font/@ss:Color = ('#ED7D31', '#FF6600')
-                        and
-                        not(ss:Data/html:Font/@html:Color = ('#ED7D31', '#FF6600'))">
+                            key('style-ids_match-for-color', $style-id)/ss:Font/@ss:Color = ('#ED7D31', '#FF6600')
+                            and
+                            not(ss:Data/html:Font/@html:Color = ('#ED7D31', '#FF6600'))">
                         <famname>
                             <xsl:apply-templates/>
                         </famname>
@@ -993,7 +1046,7 @@ recheck how origination names are parsed (multiples AND font colors)
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:when>
-            
+
             <!-- hack way to deal with adding <head> elements for scope and content and other types of notes.-->
             <!-- also gotta check style ids, since if you re-save an Excel file, it'll strip the font element out and replace it with an ID :( -->
             <xsl:when test="starts-with(*[2], '&#10;') and not(html:Font[1]/@html:Size eq '14')">
@@ -1004,17 +1057,19 @@ recheck how origination names are parsed (multiples AND font colors)
                     <xsl:apply-templates select="node() except *[1]"/>
                 </p>
             </xsl:when>
-            
+
             <xsl:when test="starts-with(text()[1], '&#10;') and html:Font[1]/@html:Size eq '14'">
                 <xsl:apply-templates select="*[1]"/>
                 <p>
                     <xsl:apply-templates select="node() except *[1]"/>
                 </p>
-            </xsl:when>  
-            
-            <xsl:when test="key('style-ids_match-for-color', $style-id)/ss:Font/@ss:Size eq '14' 
-                and html:Font[@html:Size='11'][1]/starts-with(., '&#10;')
-                and not(html:Font[1]/@html:Size eq '14')">
+            </xsl:when>
+
+            <xsl:when
+                test="
+                    key('style-ids_match-for-color', $style-id)/ss:Font/@ss:Size eq '14'
+                    and html:Font[@html:Size = '11'][1]/starts-with(., '&#10;')
+                    and not(html:Font[1]/@html:Size eq '14')">
                 <head>
                     <xsl:apply-templates select="text()[1]"/>
                 </head>
@@ -1022,7 +1077,7 @@ recheck how origination names are parsed (multiples AND font colors)
                     <xsl:apply-templates select="node() except text()[1]"/>
                 </p>
             </xsl:when>
-            
+
             <xsl:when test="starts-with(text()[1], '&#10;')">
                 <xsl:apply-templates select="text()[1]"/>
                 <p>
@@ -1094,8 +1149,8 @@ recheck how origination names are parsed (multiples AND font colors)
             <xsl:apply-templates/>
         </emph>
     </xsl:template>
-    
-    
+
+
     <!-- also need to account for this, though:
         <I><Font html:Color="#000000">See also</Font></I> 
     -->
