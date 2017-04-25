@@ -8,7 +8,7 @@
     xmlns:html="http://www.w3.org/TR/REC-html40" xmlns:xlink="http://www.w3.org/1999/xlink"
     xmlns:ead="urn:isbn:1-931666-22-9" xmlns:mdc="http://mdc" xmlns="urn:isbn:1-931666-22-9"
     xpath-default-namespace="urn:isbn:1-931666-22-9"
-    exclude-result-prefixes="xs math xd o x ss html xlink ead mdc" version="3.0">
+    exclude-result-prefixes="xs math xd o x ss html xlink ead mdc" version="2.0">
     <xd:doc scope="stylesheet">
         <xd:desc>
             <xd:p><xd:b>Created on:</xd:b> December 19, 2013</xd:p>
