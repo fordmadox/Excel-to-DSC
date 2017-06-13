@@ -12,6 +12,7 @@
         <xd:desc>
             <xd:p><xd:b>Created on:</xd:b> Aug 16, 2014</xd:p>
             <xd:p><xd:b>Significantly revised on:</xd:b> August 2, 2015</xd:p>
+            <xd:p><xd:b>Updated on:</xd:b> June 13, 2017 (was missing langmaterial and physloc notes previously)</xd:p>
             <xd:p><xd:b>Author:</xd:b> Mark Custer</xd:p>
             <xd:p>tested with Saxon-HE 9.6.0.5</xd:p>
         </xd:desc>
@@ -469,7 +470,7 @@
             <!-- column 37 -->
             <Cell ss:StyleID="s3">
                 <Data ss:Type="String">
-                    <xsl:apply-templates select="ead:physloc[position() eq $current-position]"/>
+                    <xsl:apply-templates select="ead:did/ead:physloc[position() eq $current-position]"/>
                 </Data>
             </Cell>
 
@@ -498,7 +499,7 @@
             <!-- column 40 -->
             <Cell ss:StyleID="s3">
                 <Data ss:Type="String">
-                    <xsl:apply-templates select="ead:langmaterial[position() eq $current-position]"/>
+                    <xsl:apply-templates select="ead:did/ead:langmaterial[position() eq $current-position]"/>
                 </Data>
             </Cell>
 
