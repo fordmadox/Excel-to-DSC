@@ -136,6 +136,8 @@ recheck how origination names are parsed (multiples AND font colors)
          These features just aren't supproted currently in the Excel DSC worksheet.
 
         -->
+    
+    <xsl:param name="keep-unpublished" select="true()"/>
 
     <xsl:variable name="ead-copy-filename"
         select="ss:Workbook/ss:Worksheet[@ss:Name = 'Original-EAD']/ss:Table/ss:Row[1]/ss:Cell/ss:Data"/>
@@ -159,6 +161,7 @@ recheck how origination names are parsed (multiples AND font colors)
 
 
     <xsl:template match="ss:Workbook">
+        <!-- should I change an existing archdesc to be unpublished if the new param is set?? -->
         <xsl:param name="workbook" select="." as="node()"/>
         <xsl:choose>
             <xsl:when test="$ead-copy-filename ne ''">
@@ -180,6 +183,9 @@ recheck how origination names are parsed (multiples AND font colors)
                         </filedesc>
                     </eadheader>
                     <archdesc level="collection">
+                        <xsl:if test="$keep-unpublished eq true()">
+                            <xsl:attribute name="audience" select="'internal'"/>
+                        </xsl:if>
                         <did>
                             <unitid>
                                 <!--AT can only accept 20 characters as the unitid, so that's exactly what the following will provide-->
@@ -250,6 +256,9 @@ recheck how origination names are parsed (multiples AND font colors)
 
         <!-- should I add an option to use c elements OR ennumerated components?  this would be simple to do, but it would require a slightly longer style sheet.-->
         <c>
+            <xsl:if test="$keep-unpublished eq true() and parent::ead:dsc">
+                <xsl:attribute name="audience" select="'internal'"/>
+            </xsl:if>
             <xsl:attribute name="level">
                 <xsl:value-of
                     select="
