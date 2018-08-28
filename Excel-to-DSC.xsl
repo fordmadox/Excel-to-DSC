@@ -256,7 +256,7 @@ recheck how origination names are parsed (multiples AND font colors)
 
         <!-- should I add an option to use c elements OR ennumerated components?  this would be simple to do, but it would require a slightly longer style sheet.-->
         <c>
-            <xsl:if test="$keep-unpublished eq true() and parent::ead:dsc">
+            <xsl:if test="$keep-unpublished eq true() and $depth eq 1">
                 <xsl:attribute name="audience" select="'internal'"/>
             </xsl:if>
             <xsl:attribute name="level">
