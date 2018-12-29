@@ -99,4 +99,10 @@
         </xsl:attribute>
     </xsl:template>
     
+    <!-- adjustment for ASpace imports -->
+    <xsl:template match="ead:extent">
+        <xsl:copy>
+            <xsl:value-of select="translate(lower-case(.), 'linear feet', 'linear_feet')"/>
+        </xsl:copy>
+    </xsl:template>
 </xsl:stylesheet>
