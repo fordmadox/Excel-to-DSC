@@ -102,7 +102,7 @@
     <!-- adjustment for ASpace imports -->
     <xsl:template match="ead:extent">
         <xsl:copy>
-            <xsl:value-of select="translate(lower-case(.), 'linear feet', 'linear_feet')"/>
+            <xsl:value-of select="replace(., 'linear feet', 'linear_feet', 'i')"/>
         </xsl:copy>
     </xsl:template>
 </xsl:stylesheet>
