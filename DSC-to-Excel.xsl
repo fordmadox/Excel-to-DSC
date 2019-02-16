@@ -12,7 +12,7 @@
         <xd:desc>
             <xd:p><xd:b>Created on:</xd:b> Aug 16, 2014</xd:p>
             <xd:p><xd:b>Significantly revised on:</xd:b> August 2, 2015</xd:p>
-            <xd:p><xd:b>Updated on:</xd:b> June 13, 2017 (was missing langmaterial and physloc notes previously)</xd:p>
+            <xd:p><xd:b>Updated on:</xd:b> February 16, 2019 (options to remove those AT database IDs from ASpace exports and to change "odd" notes to "scopecontent"; eventually i'll just give the "odd" notes their own column, but that will require changes in both files)</xd:p>
             <xd:p><xd:b>Author:</xd:b> Mark Custer</xd:p>
             <xd:p>tested with Saxon-HE 9.6.0.5</xd:p>
         </xd:desc>
@@ -34,6 +34,9 @@
             else
                 ''"/>
 
+    <xsl:param name="remove-AT-database-unitIDs" select="true()" as="xs:boolean"/>
+    <xsl:param name="convert-odd-to-scopecontent" select="true()" as="xs:boolean"/>
+
     <xsl:template match="/">
         <!-- storing a copy of the entire XML file so that it can be used later to re-create the collection-level information for roundtripping.
             also could use it to merge any unsupported features like bibliographies, links, etc., as long as @id attributes are present, but haven't dived that deep yet.-->
@@ -47,14 +50,12 @@
         <xsl:call-template name="Excel-Template"/>
     </xsl:template>
 
-    <xsl:template
-        match="
-            ead:c | ead:c01 | ead:c02 | ead:c03 | ead:c04 | ead:c05 | ead:c06 | ead:c07 | ead:c08 | ead:c09
-            | ead:c10 | ead:c11 | ead:c12"
-        name="level-0">
+    <xsl:template  match=" ead:c | ead:c01 | ead:c02 | ead:c03 | ead:c04 | ead:c05 | ead:c06 | ead:c07 | ead:c08 | ead:c09
+            | ead:c10 | ead:c11 | ead:c12"  name="level-0">
 
         <xsl:param name="level-0" select="false()"/>
         <xsl:param name="current-position" select="1" as="xs:integer"/>
+
 
         <!-- 
             the following could be used if you want to limit the repeating fields to just 
@@ -88,7 +89,14 @@
 
 
         <xsl:variable name="did-items" as="item()*">
-            <xsl:sequence select="ead:did/*[normalize-space()][not(self::ead:container)][not(self::ead:unitdate[@type='bulk'])][not(self::ead:physdesc[ead:extent[1]/matches(., '^\d')])][local-name() = following-sibling::*[normalize-space()]/local-name()]/local-name()"/>
+            <xsl:choose>
+                <xsl:when test="$remove-AT-database-unitIDs eq true()">
+                    <xsl:sequence select="ead:did/*[normalize-space()][not(self::ead:container)][not(self::ead:unitdate[@type='bulk'])][not(self::ead:physdesc[ead:extent[1]/matches(., '^\d')])][local-name() = following-sibling::*[normalize-space()][not(contains(@type, 'Database::'))]/local-name()]/local-name()"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:sequence select="ead:did/*[normalize-space()][not(self::ead:container)][not(self::ead:unitdate[@type='bulk'])][not(self::ead:physdesc[ead:extent[1]/matches(., '^\d')])][local-name() = following-sibling::*[normalize-space()]/local-name()]/local-name()"/>
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:variable>
         <xsl:variable name="non-did-items" as="item()*">
             <xsl:sequence select="ead:*[normalize-space()][not(local-name() = ('c', 'c01', 'c02', 'c03', 'c04', 'c05', 'c06', 'c07', 'c08', 'c09', 'c10', 'c11', 'c12'))][local-name() = following-sibling::*[normalize-space()]/local-name()]/local-name()"/>
@@ -199,7 +207,14 @@
             <!-- column 3 -->
             <Cell ss:StyleID="s3">
                 <Data ss:Type="String">
-                    <xsl:apply-templates select="ead:did/ead:unitid[position() eq $current-position]"/>
+                    <xsl:choose>
+                        <xsl:when test="$remove-AT-database-unitIDs eq true()">
+                            <xsl:apply-templates select="ead:did/ead:unitid[not(contains(@type, 'Database::'))][position() eq $current-position]"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:apply-templates select="ead:did/ead:unitid[position() eq $current-position]"/>    
+                        </xsl:otherwise>
+                    </xsl:choose>
                 </Data>
             </Cell>
             <!-- column 4 -->
@@ -443,6 +458,9 @@
             <Cell ss:StyleID="s3">
                 <Data ss:Type="String">
                     <xsl:apply-templates select="ead:scopecontent[position() eq $current-position]"/>
+                    <xsl:if test="$convert-odd-to-scopecontent eq true()">
+                        <xsl:apply-templates select="ead:odd[position() eq $current-position]"/>
+                    </xsl:if>
                 </Data>
             </Cell>
 
