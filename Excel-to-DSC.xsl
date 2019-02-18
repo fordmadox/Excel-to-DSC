@@ -139,6 +139,9 @@ recheck how origination names are parsed (multiples AND font colors)
     
     <xsl:param name="keep-unpublished" select="true()"/>
 
+    <xsl:param name="default-extent-number" select="0" as="xs:decimal"/>
+    <xsl:param name="default-extent-type" select="'linear_feet'" as="xs:string"/>
+    
     <xsl:variable name="ead-copy-filename"
         select="ss:Workbook/ss:Worksheet[@ss:Name = 'Original-EAD']/ss:Table/ss:Row[1]/ss:Cell/ss:Data"/>
 
@@ -196,7 +199,9 @@ recheck how origination names are parsed (multiples AND font colors)
                             <unitdate>undated</unitdate>
                             <unittitle>collection title</unittitle>
                             <physdesc>
-                                <extent>99 Linear feet</extent>
+                                <extent>
+                                    <xsl:value-of select="concat($default-extent-number, ' ', $default-extent-type)"/>
+                                </extent>
                             </physdesc>
                             <langmaterial>
                                 <language langcode="eng"/>
