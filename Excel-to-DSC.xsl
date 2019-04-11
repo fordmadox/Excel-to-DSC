@@ -1128,37 +1128,37 @@ recheck how origination names are parsed (multiples AND font colors)
    (why doesn't EAD have bolditalicunderline?)  
     
     -->
-    <xsl:template match="html:B[not(*)]">
+    <xsl:template match="html:B[not(*)][normalize-space()]">
         <emph render="bold">
             <xsl:apply-templates/>
         </emph>
     </xsl:template>
 
-    <xsl:template match="html:B[parent::html:U][not(*)]" priority="3">
+    <xsl:template match="html:B[parent::html:U][not(*)][normalize-space()]" priority="3">
         <emph render="boldunderline">
             <xsl:apply-templates/>
         </emph>
     </xsl:template>
 
-    <xsl:template match="html:U[parent::html:B][not(*)]" priority="2">
+    <xsl:template match="html:U[parent::html:B][not(*)][normalize-space()]" priority="2">
         <emph render="boldunderline">
             <xsl:apply-templates/>
         </emph>
     </xsl:template>
 
-    <xsl:template match="html:I[parent::html:B][not(*)]" priority="3">
+    <xsl:template match="html:I[parent::html:B][not(*)][normalize-space()]" priority="3">
         <emph render="bolditalic">
             <xsl:apply-templates/>
         </emph>
     </xsl:template>
 
-    <xsl:template match="html:B[parent::html:I][not(*)]" priority="2">
+    <xsl:template match="html:B[parent::html:I][not(*)][normalize-space()]" priority="2">
         <emph render="bolditalic">
             <xsl:apply-templates/>
         </emph>
     </xsl:template>
 
-    <xsl:template match="html:B[parent::html:Font/@html:Size = '8'][not(*)]" priority="2">
+    <xsl:template match="html:B[parent::html:Font/@html:Size = '8'][not(*)][normalize-space()]" priority="2">
         <emph render="boldsmcaps">
             <xsl:apply-templates/>
         </emph>
@@ -1168,96 +1168,96 @@ recheck how origination names are parsed (multiples AND font colors)
     <!-- also need to account for this, though:
         <I><Font html:Color="#000000">See also</Font></I> 
     -->
-    <xsl:template match="html:I[not(*)]">
+    <xsl:template match="html:I[not(*)][normalize-space()]">
         <emph render="italic">
             <xsl:apply-templates/>
         </emph>
     </xsl:template>
 
-    <xsl:template match="html:U[not(*)]">
+    <xsl:template match="html:U[not(*)][normalize-space()]">
         <emph render="underline">
             <xsl:apply-templates/>
         </emph>
     </xsl:template>
 
-    <xsl:template match="html:Sup">
+    <xsl:template match="html:Sup[normalize-space()]">
         <emph render="super">
             <xsl:apply-templates/>
         </emph>
     </xsl:template>
 
-    <xsl:template match="html:Sub">
+    <xsl:template match="html:Sub[normalize-space()]">
         <emph render="sub">
             <xsl:apply-templates/>
         </emph>
     </xsl:template>
 
-    <xsl:template match="html:Font[@html:Face = 'Courier New']">
+    <xsl:template match="html:Font[@html:Face = 'Courier New'][normalize-space()]">
         <emph render="nonproport">
             <xsl:apply-templates/>
         </emph>
     </xsl:template>
 
 
-    <xsl:template match="html:Font[@html:Size = '8'][parent::html:B][not(*)]" priority="2">
+    <xsl:template match="html:Font[@html:Size = '8'][parent::html:B][not(*)][normalize-space()]" priority="2">
         <emph render="boldsmcaps">
             <xsl:apply-templates/>
         </emph>
     </xsl:template>
 
-    <xsl:template match="html:Font[@html:Size = '8'][not(*)]">
+    <xsl:template match="html:Font[@html:Size = '8'][not(*)][normalize-space()]">
         <emph render="smcaps">
             <xsl:apply-templates/>
         </emph>
     </xsl:template>
 
-    <xsl:template match="html:Font[@html:Size = '14']">
+    <xsl:template match="html:Font[@html:Size = '14'][normalize-space()]">
         <head>
             <xsl:apply-templates/>
         </head>
     </xsl:template>
 
-    <xsl:template match="*:Font[@html:Color = ('#0070C0', '#0066CC')]">
+    <xsl:template match="*:Font[@html:Color = ('#0070C0', '#0066CC')][normalize-space()]">
         <corpname>
             <xsl:apply-templates/>
         </corpname>
     </xsl:template>
-    <xsl:template match="*:Font[@html:Color = ('#666699', '#7030A0')]">
+    <xsl:template match="*:Font[@html:Color = ('#666699', '#7030A0')][normalize-space()]">
         <persname>
             <xsl:apply-templates/>
         </persname>
     </xsl:template>
-    <xsl:template match="*:Font[@html:Color = ('#ED7D31', '#FF6600')]">
+    <xsl:template match="*:Font[@html:Color = ('#ED7D31', '#FF6600')][normalize-space()]">
         <famname>
             <xsl:apply-templates/>
         </famname>
     </xsl:template>
-    <xsl:template match="*:Font[@html:Color = ('#44546A', '#339966')]">
+    <xsl:template match="*:Font[@html:Color = ('#44546A', '#339966')][normalize-space()]">
         <geogname>
             <xsl:apply-templates/>
         </geogname>
     </xsl:template>
-    <xsl:template match="*:Font[@html:Color = ('#00B050', '#008080')]">
+    <xsl:template match="*:Font[@html:Color = ('#00B050', '#008080')][normalize-space()]">
         <genreform>
             <xsl:apply-templates/>
         </genreform>
     </xsl:template>
-    <xsl:template match="*:Font[@html:Color = ('#00B0F0', '#00CCFF')]">
+    <xsl:template match="*:Font[@html:Color = ('#00B0F0', '#00CCFF')][normalize-space()]">
         <subject>
             <xsl:apply-templates/>
         </subject>
     </xsl:template>
-    <xsl:template match="*:Font[@html:Color = ('#FFC000', '#FFCC00')]">
+    <xsl:template match="*:Font[@html:Color = ('#FFC000', '#FFCC00')][normalize-space()]">
         <occupation>
             <xsl:apply-templates/>
         </occupation>
     </xsl:template>
-    <xsl:template match="*:Font[@html:Color = '#FF00FF']">
+    <xsl:template match="*:Font[@html:Color = '#FF00FF'][normalize-space()]">
         <function>
             <xsl:apply-templates/>
         </function>
     </xsl:template>
-    <xsl:template match="*:Font[@html:Color = '#000000'][not(@html:Size = '14')]" priority="2">
+    <xsl:template match="*:Font[@html:Color = '#000000'][not(@html:Size = '14')][normalize-space()]" priority="2">
         <xsl:param name="column-number"/>
         <xsl:choose>
             <xsl:when test="number($column-number) eq 52">
@@ -1271,7 +1271,7 @@ recheck how origination names are parsed (multiples AND font colors)
         </xsl:choose>
     </xsl:template>
 
-    <xsl:template match="*:Font[@html:Color = '#FF0000']">
+    <xsl:template match="*:Font[@html:Color = '#FF0000'][normalize-space()]">
         <xsl:param name="column-number"/>
         <xsl:choose>
             <xsl:when test=".[parent::html:I/parent::html:B]">
