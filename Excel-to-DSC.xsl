@@ -1030,6 +1030,15 @@ recheck how origination names are parsed (multiples AND font colors)
                 <xsl:choose>
                     <xsl:when
                         test="
+                        key('style-ids_match-for-color', $style-id)/ss:Font/@ss:Color = ('#00B0F0', '#00CCFF')
+                        and
+                        not(ss:Data/html:Font/@html:Color = ('#00B0F0', '#00CCFF'))">
+                        <subject>
+                            <xsl:apply-templates/>
+                        </subject>
+                    </xsl:when>
+                    <xsl:when
+                        test="
                             key('style-ids_match-for-color', $style-id)/ss:Font/@ss:Color = ('#0070C0', '#0066CC')
                             and
                             not(ss:Data/html:Font/@html:Color = ('#0070C0', '#0066CC'))">
@@ -1063,6 +1072,17 @@ recheck how origination names are parsed (multiples AND font colors)
 
             <!-- hack way to deal with adding <head> elements for scope and content and other types of notes.-->
             <!-- also gotta check style ids, since if you re-save an Excel file, it'll strip the font element out and replace it with an ID :( -->
+            
+            <!-- pontential encoding:
+                    <Cell ss:Index="42" ss:StyleID="s61">
+                    <ss:Data ss:Type="String"
+      xmlns="http://www.w3.org/TR/REC-html40"><Font html:Size="14"
+       html:Color="#000000">Provenance&#10;</Font>
+       <Font html:Color="#000000">Has an ink stamp</Font>
+       </ss:Data>
+       </Cell>
+
+  -->
             <xsl:when test="starts-with(*[2], '&#10;') and not(html:Font[1]/@html:Size eq '14')">
                 <head>
                     <xsl:apply-templates select="*[1]"/>
@@ -1072,12 +1092,21 @@ recheck how origination names are parsed (multiples AND font colors)
                 </p>
             </xsl:when>
 
-            <xsl:when test="starts-with(text()[1], '&#10;') and html:Font[1]/@html:Size eq '14'">
+            <xsl:when test="contains(text()[1], '&#10;') and html:Font[1]/@html:Size eq '14'">
                 <xsl:apply-templates select="*[1]"/>
                 <p>
                     <xsl:apply-templates select="node() except *[1]"/>
                 </p>
             </xsl:when>
+            
+            
+            <xsl:when test="html:Font[1]/@html:Size eq '14'">
+                <xsl:apply-templates select="*[1]"/>
+                <p>
+                    <xsl:apply-templates select="node() except *[1]"/>
+                </p>
+            </xsl:when>
+            
 
             <xsl:when
                 test="
