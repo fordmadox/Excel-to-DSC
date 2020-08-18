@@ -343,10 +343,13 @@
                 <NamedCell ss:Name="container_1_type"/>
             </Cell>
             <!-- column 20 -->
+            <!-- update: we're now putting container/location info in altrender, and container profile info in encodinganalog.
+                        so, just change that here.  no changes to the import, process, though, as we haven't overridden anything in the default EAD importers in ASpace
+                        -->
             <Cell ss:StyleID="s3">
                 <Data ss:Type="String">
                     <xsl:apply-templates
-                        select="ead:did/ead:container[@id][not(@parent)][position() eq $current-position]/@altrender"
+                        select="ead:did/ead:container[@id][not(@parent)][position() eq $current-position]/@encodinganalog"
                     />
                 </Data>
                 <NamedCell ss:Name="container_profile"/>
