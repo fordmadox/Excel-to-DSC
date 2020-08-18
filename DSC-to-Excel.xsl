@@ -55,6 +55,10 @@
 
         <xsl:param name="level-0" select="false()"/>
         <xsl:param name="current-position" select="1" as="xs:integer"/>
+        <xsl:param name="scope-count" select="0" as="xs:integer"/>
+        <!-- only used if convert-odd-to-scopecontent is true, but doesn't hurt to calculate -->
+         <xsl:variable name="get-scope-count" select="count(ead:scopecontent)"/>
+
 
 
         <!-- 
@@ -99,7 +103,17 @@
             </xsl:choose>
         </xsl:variable>
         <xsl:variable name="non-did-items" as="item()*">
-            <xsl:sequence select="ead:*[normalize-space()][not(local-name() = ('c', 'c01', 'c02', 'c03', 'c04', 'c05', 'c06', 'c07', 'c08', 'c09', 'c10', 'c11', 'c12'))][local-name() = following-sibling::*[normalize-space()]/local-name()]/local-name()"/>
+            <xsl:choose>
+                <!-- need to treat 'odd' as 'scopecontent' when 'convert-odd-to-scopecontent' param is set.  hmmm.
+            e.g. scopecontent + odd = 2, not 1, 1.
+            -->
+                <xsl:when test="$convert-odd-to-scopecontent">
+                    <xsl:sequence select="ead:*[normalize-space()][not(local-name() = ('c', 'c01', 'c02', 'c03', 'c04', 'c05', 'c06', 'c07', 'c08', 'c09', 'c10', 'c11', 'c12'))][replace(local-name(), 'odd', 'scopecontent') = following-sibling::*[normalize-space()]/replace(local-name(), 'odd', 'scopecontent')]/replace(local-name(), 'odd', 'scopecontent')"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:sequence select="ead:*[normalize-space()][not(local-name() = ('c', 'c01', 'c02', 'c03', 'c04', 'c05', 'c06', 'c07', 'c08', 'c09', 'c10', 'c11', 'c12'))][local-name() = following-sibling::*[normalize-space()]/local-name()]/local-name()"/>
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:variable>
         <xsl:variable name="depths" as="item()*">
             <xsl:sequence select="
@@ -461,9 +475,13 @@
             <Cell ss:StyleID="s3">
                 <Data ss:Type="String">
                     <xsl:apply-templates select="ead:scopecontent[position() eq $current-position]"/>
+                   
                     <xsl:if test="$convert-odd-to-scopecontent eq true()">
-                        <xsl:apply-templates select="ead:odd[position() eq $current-position]"/>
+                        <!-- okay... but now we need to know how many scopecontent siblings.  for every one, add to the odd position
+                            -->
+                          <xsl:apply-templates select="ead:odd[(position() + $scope-count) eq $current-position]"/>
                     </xsl:if>
+                    
                 </Data>
             </Cell>
 
@@ -651,6 +669,7 @@
             <xsl:call-template name="level-0">
                 <xsl:with-param name="current-position" select="$current-position + 1" as="xs:integer"/>
                 <xsl:with-param name="level-0" select="true()"/>
+                <xsl:with-param name="scope-count" select="$get-scope-count"/>
             </xsl:call-template>
         </xsl:if>
 
