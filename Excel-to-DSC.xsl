@@ -12,7 +12,7 @@
     <xd:doc scope="stylesheet">
         <xd:desc>
             <xd:p><xd:b>Created on:</xd:b> December 19, 2013</xd:p>
-            <xd:p><xd:b>Significantly revised on:</xd:b> April 23, 2017</xd:p>
+            <xd:p><xd:b>Significantly revised on:</xd:b> August 18, 2020</xd:p>
             <xd:p><xd:b>Author:</xd:b> Mark Custer</xd:p>
             <xd:p>tested with Saxon-HE 9.6.0.5</xd:p>
         </xd:desc>
@@ -48,7 +48,7 @@ recheck how origination names are parsed (multiples AND font colors)
     <xsl:output method="xml" indent="yes" encoding="UTF-8"/>
     <xsl:strip-space elements="*"/>
     <xsl:preserve-space elements="*:Data *:Font"/>
-    <!--   (1 - 55 / A - BC), columns in Excel
+    <!--   (1 - 56 / A - BD), columns in Excel
         1   - level number (no default..  requires at least one level-1 value; level-0 values are used for repeating values wihtin the same component; e.g. multiple unitdate expressions)
         2   - level type  (if no value, the level will = "file")
         3   - unitid (ex: 1 (for "Series 1").  if blank, should the transformation auto-number the series and subseries??? add paramters for whether to auto-number, roman vs. arabic numerals, etc.) (did)
@@ -117,6 +117,8 @@ recheck how origination names are parsed (multiples AND font colors)
         
         54 - dao link (did) 
         55 - dao title (did)
+        
+        56 - system id (where we'll park the ASpace URI fragment)
          
          EAD elements/attributes that are NOT currently supported include:
          - daogrp
@@ -284,6 +286,15 @@ recheck how origination names are parsed (multiples AND font colors)
                 <xsl:attribute name="id">
                     <xsl:value-of
                         select="ss:Cell[ss:NamedCell/@ss:Name = 'component_id'][1]/ss:Data/normalize-space()"
+                    />
+                </xsl:attribute>
+            </xsl:if>
+            <!-- this next part grabs the @altrender attribute from column 56, if there is one-->
+            <xsl:if
+                test="ss:Cell[ss:NamedCell/@ss:Name = 'system_id'][ss:Data/normalize-space()]">
+                <xsl:attribute name="altrender">
+                    <xsl:value-of
+                        select="ss:Cell[ss:NamedCell/@ss:Name = 'system_id'][1]/ss:Data/normalize-space()"
                     />
                 </xsl:attribute>
             </xsl:if>
@@ -924,6 +935,7 @@ recheck how origination names are parsed (multiples AND font colors)
                 </langmaterial>
             </xsl:when>
 
+            <!-- 54 and 55 -->
             <xsl:when test="$column-number eq 54">
                 <dao xlink:type="simple">
                     <xsl:attribute name="href" namespace="http://www.w3.org/1999/xlink">

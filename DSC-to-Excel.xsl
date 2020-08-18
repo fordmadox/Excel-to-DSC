@@ -12,7 +12,7 @@
         <xd:desc>
             <xd:p><xd:b>Created on:</xd:b> Aug 16, 2014</xd:p>
             <xd:p><xd:b>Significantly revised on:</xd:b> August 2, 2015</xd:p>
-            <xd:p><xd:b>Updated on:</xd:b> February 16, 2019 (options to remove those AT database IDs from ASpace exports and to change "odd" notes to "scopecontent"; eventually i'll just give the "odd" notes their own column, but that will require changes in both files)</xd:p>
+            <xd:p><xd:b>Updated on:</xd:b> August 18, 2020</xd:p>
             <xd:p><xd:b>Author:</xd:b> Mark Custer</xd:p>
             <xd:p>tested with Saxon-HE 9.6.0.5</xd:p>
         </xd:desc>
@@ -623,6 +623,21 @@
                         select="ead:did/ead:dao[position() eq $current-position]/@xlink:title"/>
                 </Data>
             </Cell>
+            
+            <!-- column 56 -->
+            <Cell ss:StyleID="s3">
+                <Data ss:Type="String">
+                    <xsl:value-of
+                        select="
+                        if ($level-0 eq false())
+                        then
+                        @altrender
+                        else
+                        ''"
+                    />
+                </Data>
+                <NamedCell ss:Name="system_id"/>
+            </Cell>
         </Row>
 
 
@@ -831,7 +846,7 @@
                 <NamedRange ss:Name="_FilterDatabase" ss:RefersTo="=ContainerList!R1C1:R16C38"
                     ss:Hidden="1"/>
             </Names>
-            <Table ss:ExpandedColumnCount="55" x:FullColumns="1"
+            <Table ss:ExpandedColumnCount="56" x:FullColumns="1"
                 x:FullRows="1" ss:DefaultRowHeight="15">
                 <Column ss:AutoFitWidth="0" ss:Width="76"/>
                 <Column ss:Width="52" ss:Span="1"/>
@@ -877,6 +892,7 @@
                 <Column ss:AutoFitWidth="0" ss:Width="110"/>
                 <Column ss:AutoFitWidth="0" ss:Width="165"/>
                 <Column ss:AutoFitWidth="0" ss:Width="280"/>
+                <Column ss:AutoFitWidth="0" ss:Width="180"/>
                 <!--column headers-->
                 <Row ss:AutoFitHeight="0" ss:StyleID="s2">
                     <Cell>
@@ -1104,6 +1120,10 @@
                     <Cell>
                         <Data ss:Type="String">dao title</Data>
                     </Cell>
+                    <Cell>
+                        <Data ss:Type="String">system @id (leave blank, unless value already present)</Data>
+                        <NamedCell ss:Name="system_id"/>
+                    </Cell>
                 </Row>
 
                 <!-- apply templates for all the components-->
@@ -1269,6 +1289,7 @@
                 <NamedRange ss:Name="year_begin" ss:RefersTo="=ContainerList!C6"/>
                 <NamedRange ss:Name="year_end" ss:RefersTo="=ContainerList!C9"/>
                 <NamedRange ss:Name="date_expression" ss:RefersTo="=ContainerList!C5"/>
+                <NamedRange ss:Name="system_id" ss:RefersTo="=ContainerList!C56"/>
             </Names>
 
             <!-- 1st worksheet is created by the description in the DSC-->
@@ -3381,8 +3402,5 @@
             </Worksheet>
         </Workbook>
     </xsl:template>
-
-
-
 
 </xsl:stylesheet>
