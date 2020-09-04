@@ -250,7 +250,7 @@ recheck how origination names are parsed (multiples AND font colors)
             'instance_type','container_1_type','container_profile','barcode',
             'container_2_type','container_3_type',
             'extent_number','extent_value','generic_extent',
-            'component_id'
+            'component_id', 'system_id'
             )">
         </xsl:variable>
         <xsl:variable name="named-cells-present" select="ss:Row[1]/ss:Cell/ss:NamedCell[not(matches(@ss:Name, '^_'))]/@ss:Name/string()"/>
