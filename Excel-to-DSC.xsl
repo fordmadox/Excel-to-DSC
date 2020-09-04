@@ -150,7 +150,7 @@ recheck how origination names are parsed (multiples AND font colors)
         <xsl:param name="current-index"/>
         <xsl:param name="previous-index"/>
         <xsl:param name="cells-before-previous-index"/>
-        <xsl:value-of
+        <xsl:sequence
             select="
                 if ($current-index) then
                     $current-index
@@ -166,6 +166,11 @@ recheck how origination names are parsed (multiples AND font colors)
     <xsl:template match="ss:Workbook">
         <!-- should I change an existing archdesc to be unpublished if the new param is set?? -->
         <xsl:param name="workbook" select="." as="node()"/>
+        <xsl:if test="not(ss:Worksheet[@ss:Name = 'ContainerList'])">
+            <xsl:message terminate="yes">
+               <xsl:text>Woops.  No Worksheet named ContainerList, so we can't run this file.</xsl:text>
+            </xsl:message>
+        </xsl:if>
         <xsl:choose>
             <xsl:when test="$ead-copy-filename ne ''">
                 <xsl:for-each select="document($ead-copy-filename)">
@@ -235,7 +240,27 @@ recheck how origination names are parsed (multiples AND font colors)
     </xsl:template>
 
     <xsl:template match="ss:Table">
+        <!-- date_expression might be the only name that's really required, but let's be strict -->
+        <xsl:variable name="named-cells-required" select="(
+            'date_expression',
+            'year_begin','month_begin','day_begin','year_end','month_end','day_end',
+            'bulk_year_begin','bulk_month_begin','bulk_day_begin','bulk_year_end','bulk_month_end','bulk_day_end',
+            'instance_type','container_1_type','container_profile','barcode',
+            'container_2_type','container_3_type',
+            'extent_number','extent_value','generic_extent',
+            'component_id'
+            )">
+        </xsl:variable>
+        <xsl:variable name="named-cells-present" select="ss:Row[1]/ss:Cell/ss:NamedCell[not(matches(@ss:Name, '^_'))]/@ss:Name/string()"/>
         <dsc>
+            <!-- and also be strict about the order -->
+            <xsl:if test="not(deep-equal($named-cells-present, $named-cells-required))">
+                <xsl:message terminate="yes">
+                    <xsl:text>The following named cells are NOT present in your Excel template: </xsl:text>
+                    <xsl:sequence select="string-join(for $name in $named-cells-required return 
+                        $name[not($name[. = ($named-cells-present)])], '; ')"/>
+                </xsl:message>
+            </xsl:if>
             <xsl:apply-templates select="ss:Row[ss:Cell[1]/ss:Data eq '1']"/>
         </dsc>
     </xsl:template>
