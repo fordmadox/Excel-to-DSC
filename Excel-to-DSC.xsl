@@ -286,6 +286,19 @@ recheck how origination names are parsed (multiples AND font colors)
                     (: in other words, if the second column of the row is blank, then 'file' will be used as the @level type by default :)"
             as="xs:string"/>
 
+        <!-- so that rows will NOT be skipped in the case that they jump levels, e.g. 1, 3, rather than 1, 2, let's halt the whole thing -->
+        <xsl:if test="$following-depth gt ($depth + 1)">
+            <xsl:message terminate="yes">
+                <xsl:text>This spreadsheet does not include a proper hierarchy, jumping from </xsl:text>
+                <xsl:value-of select="$depth"/> 
+                <xsl:text> to </xsl:text>
+                <xsl:value-of select="$following-depth"/> 
+                <xsl:text> at Row </xsl:text>
+                <xsl:value-of select="count(preceding-sibling::ss:Row) + 2"/>
+                <xsl:text>. In order to ensure that all rows are properly transformed, you must fix this issue before converting this Excel file to EAD.</xsl:text>
+            </xsl:message>
+        </xsl:if>
+        
         <!-- should I add an option to use c elements OR ennumerated components?  this would be simple to do, but it would require a slightly longer style sheet.-->
         <c>
             <xsl:if test="$keep-unpublished eq true()">
@@ -352,8 +365,6 @@ recheck how origination names are parsed (multiples AND font colors)
                     </xsl:for-each>
                 </xsl:for-each-group>
             </xsl:if>
-
-            <!-- there's no validation for this in excel, but it requires that the spreadsheet be ordered with 1, 2, 3, etc.... and never 1, 3, for example. -->
 
             <!-- I feel like I should be able to do this by group-ending-with the current depth,
             but i might've messed something up since i couldn't get it to work as expected. -->
