@@ -1377,21 +1377,40 @@ recheck how origination names are parsed (multiples AND font colors)
     <xsl:template match="text()">
         <xsl:choose>
             <xsl:when test="contains(., '&#10;&#10;')">
-                <xsl:for-each select="tokenize(., '&#10;&#10;')">
-                    <xsl:value-of select="."/>
-                    <xsl:if test="position() ne last()">
-                        <xsl:text disable-output-escaping="yes">&lt;/p&gt;
-                            &lt;p&gt;</xsl:text>
-                    </xsl:if>
-                </xsl:for-each>
+                <xsl:call-template name="create-paragraph-from-text"/>
             </xsl:when>
-            <!-- this really won't work, though.... so, need a better way to handle line breaks-->
-            <xsl:when test=". eq '&#10;'">
-                <lb/>
+            <xsl:when test="contains(., '&#10;')">
+                <xsl:call-template name="create-line-break-from-text"/>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:value-of select="."/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
+    
+    <xsl:template name="create-paragraph-from-text">
+        <xsl:for-each select="tokenize(., '&#10;&#10;')">
+            <xsl:choose>
+                <xsl:when test="contains(., '&#10;')">
+                    <xsl:call-template name="create-line-break-from-text"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="."/>
+                </xsl:otherwise>
+            </xsl:choose>
+            <xsl:if test="position() ne last()">
+                <xsl:text disable-output-escaping="yes">&lt;/p&gt;&lt;p&gt;</xsl:text>
+            </xsl:if>
+        </xsl:for-each>
+    </xsl:template>
+    
+    <xsl:template name="create-line-break-from-text">
+        <xsl:for-each select="tokenize(., '&#10;')">
+            <xsl:value-of select="."/>
+            <xsl:if test="position() ne last()">
+                <xsl:element name="lb" namespace="urn:isbn:1-931666-22-9"/>
+            </xsl:if>
+        </xsl:for-each>
+    </xsl:template>
+    
 </xsl:stylesheet>
