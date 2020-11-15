@@ -12,7 +12,7 @@
         <xd:desc>
             <xd:p><xd:b>Created on:</xd:b> Aug 16, 2014</xd:p>
             <xd:p><xd:b>Significantly revised on:</xd:b> August 2, 2015</xd:p>
-            <xd:p><xd:b>Updated on:</xd:b> February 16, 2019 (options to remove those AT database IDs from ASpace exports and to change "odd" notes to "scopecontent"; eventually i'll just give the "odd" notes their own column, but that will require changes in both files)</xd:p>
+            <xd:p><xd:b>Updated on:</xd:b> August 18, 2020</xd:p>
             <xd:p><xd:b>Author:</xd:b> Mark Custer</xd:p>
             <xd:p>tested with Saxon-HE 9.6.0.5</xd:p>
         </xd:desc>
@@ -55,6 +55,10 @@
 
         <xsl:param name="level-0" select="false()"/>
         <xsl:param name="current-position" select="1" as="xs:integer"/>
+        <xsl:param name="scope-count" select="0" as="xs:integer"/>
+        <!-- only used if convert-odd-to-scopecontent is true, but doesn't hurt to calculate -->
+         <xsl:variable name="get-scope-count" select="count(ead:scopecontent)"/>
+
 
 
         <!-- 
@@ -99,7 +103,17 @@
             </xsl:choose>
         </xsl:variable>
         <xsl:variable name="non-did-items" as="item()*">
-            <xsl:sequence select="ead:*[normalize-space()][not(local-name() = ('c', 'c01', 'c02', 'c03', 'c04', 'c05', 'c06', 'c07', 'c08', 'c09', 'c10', 'c11', 'c12'))][local-name() = following-sibling::*[normalize-space()]/local-name()]/local-name()"/>
+            <xsl:choose>
+                <!-- need to treat 'odd' as 'scopecontent' when 'convert-odd-to-scopecontent' param is set.  hmmm.
+            e.g. scopecontent + odd = 2, not 1, 1.
+            -->
+                <xsl:when test="$convert-odd-to-scopecontent">
+                    <xsl:sequence select="ead:*[normalize-space()][not(local-name() = ('c', 'c01', 'c02', 'c03', 'c04', 'c05', 'c06', 'c07', 'c08', 'c09', 'c10', 'c11', 'c12'))][replace(local-name(), 'odd', 'scopecontent') = following-sibling::*[normalize-space()]/replace(local-name(), 'odd', 'scopecontent')]/replace(local-name(), 'odd', 'scopecontent')"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:sequence select="ead:*[normalize-space()][not(local-name() = ('c', 'c01', 'c02', 'c03', 'c04', 'c05', 'c06', 'c07', 'c08', 'c09', 'c10', 'c11', 'c12'))][local-name() = following-sibling::*[normalize-space()]/local-name()]/local-name()"/>
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:variable>
         <xsl:variable name="depths" as="item()*">
             <xsl:sequence select="
@@ -343,10 +357,13 @@
                 <NamedCell ss:Name="container_1_type"/>
             </Cell>
             <!-- column 20 -->
+            <!-- update: we're now putting container/location info in altrender, and container profile info in encodinganalog.
+                        so, just change that here.  no changes to the import, process, though, as we haven't overridden anything in the default EAD importers in ASpace
+                        -->
             <Cell ss:StyleID="s3">
                 <Data ss:Type="String">
                     <xsl:apply-templates
-                        select="ead:did/ead:container[@id][not(@parent)][position() eq $current-position]/@altrender"
+                        select="ead:did/ead:container[@id][not(@parent)][position() eq $current-position]/@encodinganalog"
                     />
                 </Data>
                 <NamedCell ss:Name="container_profile"/>
@@ -458,9 +475,13 @@
             <Cell ss:StyleID="s3">
                 <Data ss:Type="String">
                     <xsl:apply-templates select="ead:scopecontent[position() eq $current-position]"/>
+                   
                     <xsl:if test="$convert-odd-to-scopecontent eq true()">
-                        <xsl:apply-templates select="ead:odd[position() eq $current-position]"/>
+                        <!-- okay... but now we need to know how many scopecontent siblings.  for every one, add to the odd position
+                            -->
+                          <xsl:apply-templates select="ead:odd[(position() + $scope-count) eq $current-position]"/>
                     </xsl:if>
+                    
                 </Data>
             </Cell>
 
@@ -623,6 +644,21 @@
                         select="ead:did/ead:dao[position() eq $current-position]/@xlink:title"/>
                 </Data>
             </Cell>
+            
+            <!-- column 56 -->
+            <Cell ss:StyleID="s3">
+                <Data ss:Type="String">
+                    <xsl:value-of
+                        select="
+                        if ($level-0 eq false())
+                        then
+                        @altrender
+                        else
+                        ''"
+                    />
+                </Data>
+                <NamedCell ss:Name="system_id"/>
+            </Cell>
         </Row>
 
 
@@ -633,6 +669,7 @@
             <xsl:call-template name="level-0">
                 <xsl:with-param name="current-position" select="$current-position + 1" as="xs:integer"/>
                 <xsl:with-param name="level-0" select="true()"/>
+                <xsl:with-param name="scope-count" select="$get-scope-count"/>
             </xsl:call-template>
         </xsl:if>
 
@@ -831,7 +868,7 @@
                 <NamedRange ss:Name="_FilterDatabase" ss:RefersTo="=ContainerList!R1C1:R16C38"
                     ss:Hidden="1"/>
             </Names>
-            <Table ss:ExpandedColumnCount="55" x:FullColumns="1"
+            <Table ss:ExpandedColumnCount="56" x:FullColumns="1"
                 x:FullRows="1" ss:DefaultRowHeight="15">
                 <Column ss:AutoFitWidth="0" ss:Width="76"/>
                 <Column ss:Width="52" ss:Span="1"/>
@@ -877,6 +914,7 @@
                 <Column ss:AutoFitWidth="0" ss:Width="110"/>
                 <Column ss:AutoFitWidth="0" ss:Width="165"/>
                 <Column ss:AutoFitWidth="0" ss:Width="280"/>
+                <Column ss:AutoFitWidth="0" ss:Width="180"/>
                 <!--column headers-->
                 <Row ss:AutoFitHeight="0" ss:StyleID="s2">
                     <Cell>
@@ -1104,6 +1142,10 @@
                     <Cell>
                         <Data ss:Type="String">dao title</Data>
                     </Cell>
+                    <Cell>
+                        <Data ss:Type="String">system @id (leave blank, unless value already present)</Data>
+                        <NamedCell ss:Name="system_id"/>
+                    </Cell>
                 </Row>
 
                 <!-- apply templates for all the components-->
@@ -1269,6 +1311,7 @@
                 <NamedRange ss:Name="year_begin" ss:RefersTo="=ContainerList!C6"/>
                 <NamedRange ss:Name="year_end" ss:RefersTo="=ContainerList!C9"/>
                 <NamedRange ss:Name="date_expression" ss:RefersTo="=ContainerList!C5"/>
+                <NamedRange ss:Name="system_id" ss:RefersTo="=ContainerList!C56"/>
             </Names>
 
             <!-- 1st worksheet is created by the description in the DSC-->
@@ -3381,8 +3424,5 @@
             </Worksheet>
         </Workbook>
     </xsl:template>
-
-
-
 
 </xsl:stylesheet>

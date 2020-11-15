@@ -12,7 +12,7 @@
     <xd:doc scope="stylesheet">
         <xd:desc>
             <xd:p><xd:b>Created on:</xd:b> December 19, 2013</xd:p>
-            <xd:p><xd:b>Significantly revised on:</xd:b> April 23, 2017</xd:p>
+            <xd:p><xd:b>Significantly revised on:</xd:b> August 18, 2020</xd:p>
             <xd:p><xd:b>Author:</xd:b> Mark Custer</xd:p>
             <xd:p>tested with Saxon-HE 9.6.0.5</xd:p>
         </xd:desc>
@@ -48,7 +48,7 @@ recheck how origination names are parsed (multiples AND font colors)
     <xsl:output method="xml" indent="yes" encoding="UTF-8"/>
     <xsl:strip-space elements="*"/>
     <xsl:preserve-space elements="*:Data *:Font"/>
-    <!--   (1 - 55 / A - BC), columns in Excel
+    <!--   (1 - 56 / A - BD), columns in Excel
         1   - level number (no default..  requires at least one level-1 value; level-0 values are used for repeating values wihtin the same component; e.g. multiple unitdate expressions)
         2   - level type  (if no value, the level will = "file")
         3   - unitid (ex: 1 (for "Series 1").  if blank, should the transformation auto-number the series and subseries??? add paramters for whether to auto-number, roman vs. arabic numerals, etc.) (did)
@@ -117,6 +117,8 @@ recheck how origination names are parsed (multiples AND font colors)
         
         54 - dao link (did) 
         55 - dao title (did)
+        
+        56 - system id (where we'll park the ASpace URI fragment)
          
          EAD elements/attributes that are NOT currently supported include:
          - daogrp
@@ -248,7 +250,7 @@ recheck how origination names are parsed (multiples AND font colors)
             'instance_type','container_1_type','container_profile','barcode',
             'container_2_type','container_3_type',
             'extent_number','extent_value','generic_extent',
-            'component_id'
+            'component_id', 'system_id'
             )">
         </xsl:variable>
         <xsl:variable name="named-cells-present" select="ss:Row[1]/ss:Cell/ss:NamedCell[not(matches(@ss:Name, '^_'))]/@ss:Name/string()"/>
@@ -284,6 +286,19 @@ recheck how origination names are parsed (multiples AND font colors)
                     (: in other words, if the second column of the row is blank, then 'file' will be used as the @level type by default :)"
             as="xs:string"/>
 
+        <!-- so that rows will NOT be skipped in the case that they jump levels, e.g. 1, 3, rather than 1, 2, let's halt the whole thing -->
+        <xsl:if test="$following-depth gt ($depth + 1)">
+            <xsl:message terminate="yes">
+                <xsl:text>This spreadsheet does not include a proper hierarchy, jumping from </xsl:text>
+                <xsl:value-of select="$depth"/> 
+                <xsl:text> to </xsl:text>
+                <xsl:value-of select="$following-depth"/> 
+                <xsl:text> at Row </xsl:text>
+                <xsl:value-of select="count(preceding-sibling::ss:Row) + 2"/>
+                <xsl:text>. In order to ensure that all rows are properly transformed, you must fix this issue before converting this Excel file to EAD.</xsl:text>
+            </xsl:message>
+        </xsl:if>
+        
         <!-- should I add an option to use c elements OR ennumerated components?  this would be simple to do, but it would require a slightly longer style sheet.-->
         <c>
             <xsl:if test="$keep-unpublished eq true()">
@@ -309,6 +324,15 @@ recheck how origination names are parsed (multiples AND font colors)
                 <xsl:attribute name="id">
                     <xsl:value-of
                         select="ss:Cell[ss:NamedCell/@ss:Name = 'component_id'][1]/ss:Data/normalize-space()"
+                    />
+                </xsl:attribute>
+            </xsl:if>
+            <!-- this next part grabs the @altrender attribute from column 56, if there is one-->
+            <xsl:if
+                test="ss:Cell[ss:NamedCell/@ss:Name = 'system_id'][ss:Data/normalize-space()]">
+                <xsl:attribute name="altrender">
+                    <xsl:value-of
+                        select="ss:Cell[ss:NamedCell/@ss:Name = 'system_id'][1]/ss:Data/normalize-space()"
                     />
                 </xsl:attribute>
             </xsl:if>
@@ -341,8 +365,6 @@ recheck how origination names are parsed (multiples AND font colors)
                     </xsl:for-each>
                 </xsl:for-each-group>
             </xsl:if>
-
-            <!-- there's no validation for this in excel, but it requires that the spreadsheet be ordered with 1, 2, 3, etc.... and never 1, 3, for example. -->
 
             <!-- I feel like I should be able to do this by group-ending-with the current depth,
             but i might've messed something up since i couldn't get it to work as expected. -->
@@ -949,6 +971,7 @@ recheck how origination names are parsed (multiples AND font colors)
                 </langmaterial>
             </xsl:when>
 
+            <!-- 54 and 55 -->
             <xsl:when test="$column-number eq 54">
                 <dao xlink:type="simple">
                     <xsl:attribute name="href" namespace="http://www.w3.org/1999/xlink">
@@ -1365,21 +1388,40 @@ recheck how origination names are parsed (multiples AND font colors)
     <xsl:template match="text()">
         <xsl:choose>
             <xsl:when test="contains(., '&#10;&#10;')">
-                <xsl:for-each select="tokenize(., '&#10;&#10;')">
-                    <xsl:value-of select="."/>
-                    <xsl:if test="position() ne last()">
-                        <xsl:text disable-output-escaping="yes">&lt;/p&gt;
-                            &lt;p&gt;</xsl:text>
-                    </xsl:if>
-                </xsl:for-each>
+                <xsl:call-template name="create-paragraph-from-text"/>
             </xsl:when>
-            <!-- this really won't work, though.... so, need a better way to handle line breaks-->
-            <xsl:when test=". eq '&#10;'">
-                <lb/>
+            <xsl:when test="contains(., '&#10;')">
+                <xsl:call-template name="create-line-break-from-text"/>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:value-of select="."/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
+    
+    <xsl:template name="create-paragraph-from-text">
+        <xsl:for-each select="tokenize(., '&#10;&#10;')">
+            <xsl:choose>
+                <xsl:when test="contains(., '&#10;')">
+                    <xsl:call-template name="create-line-break-from-text"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="."/>
+                </xsl:otherwise>
+            </xsl:choose>
+            <xsl:if test="position() ne last()">
+                <xsl:text disable-output-escaping="yes">&lt;/p&gt;&lt;p&gt;</xsl:text>
+            </xsl:if>
+        </xsl:for-each>
+    </xsl:template>
+    
+    <xsl:template name="create-line-break-from-text">
+        <xsl:for-each select="tokenize(., '&#10;')">
+            <xsl:value-of select="."/>
+            <xsl:if test="position() ne last()">
+                <xsl:element name="lb" namespace="urn:isbn:1-931666-22-9"/>
+            </xsl:if>
+        </xsl:for-each>
+    </xsl:template>
+    
 </xsl:stylesheet>
