@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="22.0">
     <meta>
-        <filters directoryPatterns="" filePatterns="" positiveFilePatterns="" showHiddenFiles="false"/>
+        <filters directoryPatterns="" filePatterns="" positiveFilePatterns=""
+            showHiddenFiles="false"/>
         <options>
             <serialized version="22.0" xml:space="preserve">
                 <serializableOrderedMap>
                     <entry>
                         <String>scenarios</String>
-                        <scenario-array>                            <scenario>
+                        <scenario-array>
+                            <scenario>
                                 <field name="advancedOptionsMap">
                                     <null/>
                                 </field>
@@ -15,10 +17,10 @@
                                     <String>1 EAD3-to-EAD2002</String>
                                 </field>
                                 <field name="baseURL">
-                                    <String></String>
+                                    <String/>
                                 </field>
                                 <field name="footerURL">
-                                    <String></String>
+                                    <String/>
                                 </field>
                                 <field name="fOPMethod">
                                     <String>pdf</String>
@@ -27,7 +29,7 @@
                                     <String>Apache FOP</String>
                                 </field>
                                 <field name="headerURL">
-                                    <String></String>
+                                    <String/>
                                 </field>
                                 <field name="inputXSLURL">
                                     <String>https://raw.githubusercontent.com/YaleArchivesSpace/xslt-files/master/Back-to-2002_from-EAD3.xsl</String>
@@ -51,7 +53,7 @@
                                     <Boolean>false</Boolean>
                                 </field>
                                 <field name="outputResource">
-                                    <String>${cfn}-excel.xml</String>
+                                    <String>${cfn}-EAD2002.xml</String>
                                 </field>
                                 <field name="openOtherLocationInBrowser">
                                     <Boolean>false</Boolean>
@@ -98,10 +100,10 @@
                                     <String>2 EAD-to-Excel</String>
                                 </field>
                                 <field name="baseURL">
-                                    <String></String>
+                                    <String/>
                                 </field>
                                 <field name="footerURL">
-                                    <String></String>
+                                    <String/>
                                 </field>
                                 <field name="fOPMethod">
                                     <String>pdf</String>
@@ -110,7 +112,7 @@
                                     <String>Apache FOP</String>
                                 </field>
                                 <field name="headerURL">
-                                    <String></String>
+                                    <String/>
                                 </field>
                                 <field name="inputXSLURL">
                                     <String>https://raw.githubusercontent.com/fordmadox/Excel-to-DSC/master/DSC-to-Excel.xsl</String>
@@ -181,10 +183,10 @@
                                     <String>3 Excel-to-EAD</String>
                                 </field>
                                 <field name="baseURL">
-                                    <String></String>
+                                    <String/>
                                 </field>
                                 <field name="footerURL">
-                                    <String></String>
+                                    <String/>
                                 </field>
                                 <field name="fOPMethod">
                                     <String>pdf</String>
@@ -193,7 +195,7 @@
                                     <String>Apache FOP</String>
                                 </field>
                                 <field name="headerURL">
-                                    <String></String>
+                                    <String/>
                                 </field>
                                 <field name="inputXSLURL">
                                     <String>https://raw.githubusercontent.com/fordmadox/Excel-to-DSC/master/Excel-to-DSC.xsl</String>
@@ -264,10 +266,10 @@
                                     <String>3 Excel/EAD-to-PDF-preview</String>
                                 </field>
                                 <field name="baseURL">
-                                    <String></String>
+                                    <String/>
                                 </field>
                                 <field name="footerURL">
-                                    <String></String>
+                                    <String/>
                                 </field>
                                 <field name="fOPMethod">
                                     <String>pdf</String>
@@ -276,7 +278,7 @@
                                     <String>Apache FOP</String>
                                 </field>
                                 <field name="headerURL">
-                                    <String></String>
+                                    <String/>
                                 </field>
                                 <field name="inputXSLURL">
                                     <String>https://raw.githubusercontent.com/YaleArchivesSpace/xslt-files/master/EAD_prep-for-pdf-preview.xsl</String>
@@ -351,10 +353,10 @@
                                     <String>4 prep-EAD-for-ASpace</String>
                                 </field>
                                 <field name="baseURL">
-                                    <String></String>
+                                    <String/>
                                 </field>
                                 <field name="footerURL">
-                                    <String></String>
+                                    <String/>
                                 </field>
                                 <field name="fOPMethod">
                                     <String>pdf</String>
@@ -363,7 +365,7 @@
                                     <String>Apache FOP</String>
                                 </field>
                                 <field name="headerURL">
-                                    <String></String>
+                                    <String/>
                                 </field>
                                 <field name="inputXSLURL">
                                     <String>https://raw.githubusercontent.com/fordmadox/Excel-to-DSC/master/post-excel-to-ead__change-unitdates-prior-to-uploading-to-ASpace.xsl</String>
@@ -436,10 +438,10 @@
                                     <String>5 BOX-method_convert-hashes-to-foldernumbers</String>
                                 </field>
                                 <field name="baseURL">
-                                    <String></String>
+                                    <String/>
                                 </field>
                                 <field name="footerURL">
-                                    <String></String>
+                                    <String/>
                                 </field>
                                 <field name="fOPMethod">
                                     <String>pdf</String>
@@ -448,7 +450,7 @@
                                     <String>Apache FOP</String>
                                 </field>
                                 <field name="headerURL">
-                                    <String></String>
+                                    <String/>
                                 </field>
                                 <field name="inputXSLURL">
                                     <String>https://raw.githubusercontent.com/fordmadox/EAD-folder-numbering/master/add-folders-numbered_per_box.xsl</String>
@@ -519,10 +521,10 @@
                                     <String>5 COLLECTION-method_convert-hashes-to-foldernumbers</String>
                                 </field>
                                 <field name="baseURL">
-                                    <String></String>
+                                    <String/>
                                 </field>
                                 <field name="footerURL">
-                                    <String></String>
+                                    <String/>
                                 </field>
                                 <field name="fOPMethod">
                                     <String>pdf</String>
@@ -531,7 +533,7 @@
                                     <String>Apache FOP</String>
                                 </field>
                                 <field name="headerURL">
-                                    <String></String>
+                                    <String/>
                                 </field>
                                 <field name="inputXSLURL">
                                     <String>https://raw.githubusercontent.com/fordmadox/EAD-folder-numbering/master/add-folders-numbered_per_collection.xsl</String>
@@ -602,10 +604,10 @@
                                     <String>6 ArchivesSpace EAD3 to PDF (preview unpublished)</String>
                                 </field>
                                 <field name="baseURL">
-                                    <String></String>
+                                    <String/>
                                 </field>
                                 <field name="footerURL">
-                                    <String></String>
+                                    <String/>
                                 </field>
                                 <field name="fOPMethod">
                                     <String>pdf</String>
@@ -614,7 +616,7 @@
                                     <String>Apache FOP</String>
                                 </field>
                                 <field name="headerURL">
-                                    <String></String>
+                                    <String/>
                                 </field>
                                 <field name="inputXSLURL">
                                     <String>https://raw.githubusercontent.com/YaleArchivesSpace/EAD3-to-PDF-UA/master/xslt-to-update-the-ASpace-export/yale.aspace_v2_to_yale_ead3.xsl</String>
@@ -856,10 +858,10 @@
                                     <String>7 EAD3 convert for validation purposes</String>
                                 </field>
                                 <field name="baseURL">
-                                    <String></String>
+                                    <String/>
                                 </field>
                                 <field name="footerURL">
-                                    <String></String>
+                                    <String/>
                                 </field>
                                 <field name="fOPMethod">
                                     <String>pdf</String>
@@ -868,7 +870,7 @@
                                     <String>Apache FOP</String>
                                 </field>
                                 <field name="headerURL">
-                                    <String></String>
+                                    <String/>
                                 </field>
                                 <field name="inputXSLURL">
                                     <String>https://raw.githubusercontent.com/YaleArchivesSpace/EAD3-to-PDF-UA/master/xslt-to-update-the-ASpace-export/yale.aspace_v2_to_yale_ead3.xsl</String>
