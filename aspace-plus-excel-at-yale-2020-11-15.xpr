@@ -97,13 +97,13 @@
                                     <null/>
                                 </field>
                                 <field name="name">
-                                    <String>2 EAD-to-Excel</String>
+                                    <String>2 EAD3-to-Excel</String>
                                 </field>
                                 <field name="baseURL">
-                                    <String/>
+                                    <String></String>
                                 </field>
                                 <field name="footerURL">
-                                    <String/>
+                                    <String></String>
                                 </field>
                                 <field name="fOPMethod">
                                     <String>pdf</String>
@@ -112,10 +112,10 @@
                                     <String>Apache FOP</String>
                                 </field>
                                 <field name="headerURL">
-                                    <String/>
+                                    <String></String>
                                 </field>
                                 <field name="inputXSLURL">
-                                    <String>https://raw.githubusercontent.com/fordmadox/Excel-to-DSC/master/DSC-to-Excel.xsl</String>
+                                    <String>https://raw.githubusercontent.com/YaleArchivesSpace/xslt-files/master/Back-to-2002_from-EAD3.xsl</String>
                                 </field>
                                 <field name="inputXMLURL">
                                     <String>${currentFileURL}</String>
@@ -166,7 +166,9 @@
                                     <list/>
                                 </field>
                                 <field name="cascadingStylesheets">
-                                    <String-array/>
+                                    <String-array>
+                                        <String>https://raw.githubusercontent.com/fordmadox/Excel-to-DSC/master/DSC-to-Excel.xsl</String>
+                                    </String-array>
                                 </field>
                                 <field name="xslTransformer">
                                     <String>Saxon-EE</String>
