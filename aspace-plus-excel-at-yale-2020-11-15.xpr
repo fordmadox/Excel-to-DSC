@@ -1027,7 +1027,20 @@
                                                 <null/>
                                             </field>
                                             <field name="validationSchema">
-                                                <null/>
+                                                <validationUnitSchema>
+                                                    <field name="dtdSchemaPublicID">
+                                                        <null/>
+                                                    </field>
+                                                    <field name="schematronPhase">
+                                                        <null/>
+                                                    </field>
+                                                    <field name="type">
+                                                        <Integer>2</Integer>
+                                                    </field>
+                                                    <field name="uri">
+                                                        <String>https://raw.githubusercontent.com/SAA-SDT/EAD3/master/ead3.xsd</String>
+                                                    </field>
+                                                </validationUnitSchema>
                                             </field>
                                         </validationUnit>
                                         <validationUnit>
@@ -1069,7 +1082,7 @@
                                                         <Integer>7</Integer>
                                                     </field>
                                                     <field name="uri">
-                                                        <String>http://www.library.yale.edu/facc/schemas/yale.aspace.ead2002.sch</String>
+                                                        <String>https://raw.githubusercontent.com/SAA-SDT/EAD3/master/schematron/ead3.sch</String>
                                                     </field>
                                                 </validationUnitSchema>
                                             </field>
@@ -1080,7 +1093,7 @@
                                     <String>Validation_scenario</String>
                                 </field>
                                 <field name="name">
-                                    <String>YaleEADbpg-validation</String>
+                                    <String>EAD3-strict-validation-test</String>
                                 </field>
                             </validationScenario>
                         </validationScenario-array>
