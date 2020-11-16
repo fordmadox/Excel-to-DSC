@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project version="18.0">
+<project version="22.0">
     <meta>
-        <filters directoryPatterns="" filePatterns="" positiveFilePatterns="" showHiddenFiles="false"/>
+        <filters directoryPatterns="" filePatterns="" positiveFilePatterns=""
+            showHiddenFiles="false"/>
         <options>
-            <serialized version="18.0" xml:space="preserve">
+            <serialized version="22.0" xml:space="preserve">
                 <serializableOrderedMap>
                     <entry>
                         <String>scenarios</String>
@@ -13,13 +14,13 @@
                                     <null/>
                                 </field>
                                 <field name="name">
-                                    <String>1 ASpace-to-YaleEADbpg</String>
+                                    <String>1 EAD3-to-EAD2002</String>
                                 </field>
                                 <field name="baseURL">
-                                    <String></String>
+                                    <String/>
                                 </field>
                                 <field name="footerURL">
-                                    <String></String>
+                                    <String/>
                                 </field>
                                 <field name="fOPMethod">
                                     <String>pdf</String>
@@ -28,10 +29,10 @@
                                     <String>Apache FOP</String>
                                 </field>
                                 <field name="headerURL">
-                                    <String></String>
+                                    <String/>
                                 </field>
                                 <field name="inputXSLURL">
-                                    <String>http://www.library.yale.edu/facc/xsl/aspace/yale.aspace_v112_to_yalebpgs.xsl</String>
+                                    <String>https://raw.githubusercontent.com/YaleArchivesSpace/xslt-files/master/Back-to-2002_from-EAD3.xsl</String>
                                 </field>
                                 <field name="inputXMLURL">
                                     <String>${currentFileURL}</String>
@@ -51,97 +52,8 @@
                                 <field name="openInBrowser">
                                     <Boolean>false</Boolean>
                                 </field>
-                                <field name="outputFile">
-                                    <File>${cfn}_bpg.xml</File>
-                                </field>
                                 <field name="outputResource">
-                                    <String>${cfn}_bpg.xml</String>
-                                </field>
-                                <field name="openOtherLocationInBrowser">
-                                    <Boolean>false</Boolean>
-                                </field>
-                                <field name="locationToOpenInBrowserURL">
-                                    <null/>
-                                </field>
-                                <field name="openInEditor">
-                                    <Boolean>true</Boolean>
-                                </field>
-                                <field name="showInHTMLPane">
-                                    <Boolean>false</Boolean>
-                                </field>
-                                <field name="showInXMLPane">
-                                    <Boolean>true</Boolean>
-                                </field>
-                                <field name="showInSVGPane">
-                                    <Boolean>false</Boolean>
-                                </field>
-                                <field name="showInResultSetPane">
-                                    <Boolean>false</Boolean>
-                                </field>
-                                <field name="useXSLTInput">
-                                    <Boolean>true</Boolean>
-                                </field>
-                                <field name="xsltParams">
-                                    <list/>
-                                </field>
-                                <field name="cascadingStylesheets">
-                                    <String-array/>
-                                </field>
-                                <field name="xslTransformer">
-                                    <String>Saxon-HE</String>
-                                </field>
-                                <field name="extensionURLs">
-                                    <String-array/>
-                                </field>
-                            </scenario>
-                            <scenario>
-                                <field name="advancedOptionsMap">
-                                    <null/>
-                                </field>
-                                <field name="name">
-                                    <String>1 YaleEADbpg-to-PDF</String>
-                                </field>
-                                <field name="baseURL">
-                                    <String></String>
-                                </field>
-                                <field name="footerURL">
-                                    <String></String>
-                                </field>
-                                <field name="fOPMethod">
-                                    <String>pdf</String>
-                                </field>
-                                <field name="fOProcessorName">
-                                    <String>Apache FOP</String>
-                                </field>
-                                <field name="headerURL">
-                                    <String></String>
-                                </field>
-                                <field name="inputXSLURL">
-                                    <String>http://www.library.yale.edu/facc/xsl/fo/yul.ead2002.pdf.xsl</String>
-                                </field>
-                                <field name="inputXMLURL">
-                                    <String>${currentFileURL}</String>
-                                </field>
-                                <field name="defaultScenario">
-                                    <Boolean>false</Boolean>
-                                </field>
-                                <field name="isFOPPerforming">
-                                    <Boolean>true</Boolean>
-                                </field>
-                                <field name="type">
-                                    <String>XSL</String>
-                                </field>
-                                <field name="saveAs">
-                                    <Boolean>true</Boolean>
-                                </field>
-                                <field name="openInBrowser">
-                                    <Boolean>true</Boolean>
-                                </field>
-                                <field name="outputFile">
-                                    <File>${cfn}.pdf</File>
-                                </field>
-                                <field name="outputResource">
-                                    <String>${cfn}.pdf</String>
+                                    <String>${cfn}-EAD2002.xml</String>
                                 </field>
                                 <field name="openOtherLocationInBrowser">
                                     <Boolean>false</Boolean>
@@ -188,10 +100,10 @@
                                     <String>2 EAD-to-Excel</String>
                                 </field>
                                 <field name="baseURL">
-                                    <String></String>
+                                    <String/>
                                 </field>
                                 <field name="footerURL">
-                                    <String></String>
+                                    <String/>
                                 </field>
                                 <field name="fOPMethod">
                                     <String>pdf</String>
@@ -200,7 +112,7 @@
                                     <String>Apache FOP</String>
                                 </field>
                                 <field name="headerURL">
-                                    <String></String>
+                                    <String/>
                                 </field>
                                 <field name="inputXSLURL">
                                     <String>https://raw.githubusercontent.com/fordmadox/Excel-to-DSC/master/DSC-to-Excel.xsl</String>
@@ -222,9 +134,6 @@
                                 </field>
                                 <field name="openInBrowser">
                                     <Boolean>false</Boolean>
-                                </field>
-                                <field name="outputFile">
-                                    <File>${cfn}-excel.xml</File>
                                 </field>
                                 <field name="outputResource">
                                     <String>${cfn}-excel.xml</String>
@@ -274,10 +183,10 @@
                                     <String>3 Excel-to-EAD</String>
                                 </field>
                                 <field name="baseURL">
-                                    <String></String>
+                                    <String/>
                                 </field>
                                 <field name="footerURL">
-                                    <String></String>
+                                    <String/>
                                 </field>
                                 <field name="fOPMethod">
                                     <String>pdf</String>
@@ -286,7 +195,7 @@
                                     <String>Apache FOP</String>
                                 </field>
                                 <field name="headerURL">
-                                    <String></String>
+                                    <String/>
                                 </field>
                                 <field name="inputXSLURL">
                                     <String>https://raw.githubusercontent.com/fordmadox/Excel-to-DSC/master/Excel-to-DSC.xsl</String>
@@ -308,9 +217,6 @@
                                 </field>
                                 <field name="openInBrowser">
                                     <Boolean>false</Boolean>
-                                </field>
-                                <field name="outputFile">
-                                    <File>${cfn}-ead.xml</File>
                                 </field>
                                 <field name="outputResource">
                                     <String>${cfn}-ead.xml</String>
@@ -360,10 +266,10 @@
                                     <String>3 Excel/EAD-to-PDF-preview</String>
                                 </field>
                                 <field name="baseURL">
-                                    <String></String>
+                                    <String/>
                                 </field>
                                 <field name="footerURL">
-                                    <String></String>
+                                    <String/>
                                 </field>
                                 <field name="fOPMethod">
                                     <String>pdf</String>
@@ -372,7 +278,7 @@
                                     <String>Apache FOP</String>
                                 </field>
                                 <field name="headerURL">
-                                    <String></String>
+                                    <String/>
                                 </field>
                                 <field name="inputXSLURL">
                                     <String>https://raw.githubusercontent.com/YaleArchivesSpace/xslt-files/master/EAD_prep-for-pdf-preview.xsl</String>
@@ -394,9 +300,6 @@
                                 </field>
                                 <field name="openInBrowser">
                                     <Boolean>true</Boolean>
-                                </field>
-                                <field name="outputFile">
-                                    <File>${cfn}.pdf</File>
                                 </field>
                                 <field name="outputResource">
                                     <String>${cfn}.pdf</String>
@@ -447,13 +350,13 @@
                                     <null/>
                                 </field>
                                 <field name="name">
-                                    <String>4 ead-fix-unitdates-for-ASpace</String>
+                                    <String>4 prep-EAD-for-ASpace</String>
                                 </field>
                                 <field name="baseURL">
-                                    <String></String>
+                                    <String/>
                                 </field>
                                 <field name="footerURL">
-                                    <String></String>
+                                    <String/>
                                 </field>
                                 <field name="fOPMethod">
                                     <String>pdf</String>
@@ -462,7 +365,7 @@
                                     <String>Apache FOP</String>
                                 </field>
                                 <field name="headerURL">
-                                    <String></String>
+                                    <String/>
                                 </field>
                                 <field name="inputXSLURL">
                                     <String>https://raw.githubusercontent.com/fordmadox/Excel-to-DSC/master/post-excel-to-ead__change-unitdates-prior-to-uploading-to-ASpace.xsl</String>
@@ -485,11 +388,8 @@
                                 <field name="openInBrowser">
                                     <Boolean>false</Boolean>
                                 </field>
-                                <field name="outputFile">
-                                    <File>${cfn}-date-change.xml</File>
-                                </field>
                                 <field name="outputResource">
-                                    <String>${cfn}-date-change.xml</String>
+                                    <String>${cfn}-prepped4aspace.xml</String>
                                 </field>
                                 <field name="openOtherLocationInBrowser">
                                     <Boolean>false</Boolean>
@@ -519,7 +419,9 @@
                                     <list/>
                                 </field>
                                 <field name="cascadingStylesheets">
-                                    <String-array/>
+                                    <String-array>
+                                        <String>https://raw.githubusercontent.com/YaleArchivesSpace/xslt-files/master/EAD_expand_top_container_ranges_prior_to_import.xsl</String>
+                                    </String-array>
                                 </field>
                                 <field name="xslTransformer">
                                     <String>Saxon-EE</String>
@@ -536,10 +438,10 @@
                                     <String>5 BOX-method_convert-hashes-to-foldernumbers</String>
                                 </field>
                                 <field name="baseURL">
-                                    <String></String>
+                                    <String/>
                                 </field>
                                 <field name="footerURL">
-                                    <String></String>
+                                    <String/>
                                 </field>
                                 <field name="fOPMethod">
                                     <String>pdf</String>
@@ -548,7 +450,7 @@
                                     <String>Apache FOP</String>
                                 </field>
                                 <field name="headerURL">
-                                    <String></String>
+                                    <String/>
                                 </field>
                                 <field name="inputXSLURL">
                                     <String>https://raw.githubusercontent.com/fordmadox/EAD-folder-numbering/master/add-folders-numbered_per_box.xsl</String>
@@ -570,9 +472,6 @@
                                 </field>
                                 <field name="openInBrowser">
                                     <Boolean>false</Boolean>
-                                </field>
-                                <field name="outputFile">
-                                    <File>${cfn}-foldered_per_box.xml</File>
                                 </field>
                                 <field name="outputResource">
                                     <String>${cfn}-foldered_per_box.xml</String>
@@ -622,10 +521,10 @@
                                     <String>5 COLLECTION-method_convert-hashes-to-foldernumbers</String>
                                 </field>
                                 <field name="baseURL">
-                                    <String></String>
+                                    <String/>
                                 </field>
                                 <field name="footerURL">
-                                    <String></String>
+                                    <String/>
                                 </field>
                                 <field name="fOPMethod">
                                     <String>pdf</String>
@@ -634,7 +533,7 @@
                                     <String>Apache FOP</String>
                                 </field>
                                 <field name="headerURL">
-                                    <String></String>
+                                    <String/>
                                 </field>
                                 <field name="inputXSLURL">
                                     <String>https://raw.githubusercontent.com/fordmadox/EAD-folder-numbering/master/add-folders-numbered_per_collection.xsl</String>
@@ -656,9 +555,6 @@
                                 </field>
                                 <field name="openInBrowser">
                                     <Boolean>false</Boolean>
-                                </field>
-                                <field name="outputFile">
-                                    <File>${cfn}-foldered_per_collection.xml</File>
                                 </field>
                                 <field name="outputResource">
                                     <String>${cfn}-foldered_per_collection.xml</String>
@@ -700,61 +596,404 @@
                                     <String-array/>
                                 </field>
                             </scenario>
+                            <scenario>
+                                <field name="advancedOptionsMap">
+                                    <null/>
+                                </field>
+                                <field name="name">
+                                    <String>6 ArchivesSpace EAD3 to PDF (preview unpublished)</String>
+                                </field>
+                                <field name="baseURL">
+                                    <String/>
+                                </field>
+                                <field name="footerURL">
+                                    <String/>
+                                </field>
+                                <field name="fOPMethod">
+                                    <String>pdf</String>
+                                </field>
+                                <field name="fOProcessorName">
+                                    <String>Apache FOP</String>
+                                </field>
+                                <field name="headerURL">
+                                    <String/>
+                                </field>
+                                <field name="inputXSLURL">
+                                    <String>https://raw.githubusercontent.com/YaleArchivesSpace/EAD3-to-PDF-UA/master/xslt-to-update-the-ASpace-export/yale.aspace_v2_to_yale_ead3.xsl</String>
+                                </field>
+                                <field name="inputXMLURL">
+                                    <String>${currentFileURL}</String>
+                                </field>
+                                <field name="defaultScenario">
+                                    <Boolean>false</Boolean>
+                                </field>
+                                <field name="isFOPPerforming">
+                                    <Boolean>true</Boolean>
+                                </field>
+                                <field name="type">
+                                    <String>XSL</String>
+                                </field>
+                                <field name="saveAs">
+                                    <Boolean>true</Boolean>
+                                </field>
+                                <field name="openInBrowser">
+                                    <Boolean>true</Boolean>
+                                </field>
+                                <field name="outputResource">
+                                    <String>${cfn}.pdf</String>
+                                </field>
+                                <field name="openOtherLocationInBrowser">
+                                    <Boolean>false</Boolean>
+                                </field>
+                                <field name="locationToOpenInBrowserURL">
+                                    <null/>
+                                </field>
+                                <field name="openInEditor">
+                                    <Boolean>false</Boolean>
+                                </field>
+                                <field name="showInHTMLPane">
+                                    <Boolean>false</Boolean>
+                                </field>
+                                <field name="showInXMLPane">
+                                    <Boolean>false</Boolean>
+                                </field>
+                                <field name="showInSVGPane">
+                                    <Boolean>false</Boolean>
+                                </field>
+                                <field name="showInResultSetPane">
+                                    <Boolean>false</Boolean>
+                                </field>
+                                <field name="useXSLTInput">
+                                    <Boolean>true</Boolean>
+                                </field>
+                                <field name="xsltParams">
+                                    <list>
+                                        <transformationParameter>
+                                            <field name="paramDescription">
+                                                <paramDescriptor>
+                                                    <field name="localName">
+                                                        <String>backup-font</String>
+                                                    </field>
+                                                    <field name="prefix">
+                                                        <null/>
+                                                    </field>
+                                                    <field name="namespace">
+                                                        <null/>
+                                                    </field>
+                                                </paramDescriptor>
+                                            </field>
+                                            <field name="value">
+                                                <String>NotoSans, KurintoText</String>
+                                            </field>
+                                            <field name="hasXPathValue">
+                                                <Boolean>false</Boolean>
+                                            </field>
+                                            <field name="isStatic">
+                                                <Boolean>false</Boolean>
+                                            </field>
+                                        </transformationParameter>
+                                        <transformationParameter>
+                                            <field name="paramDescription">
+                                                <paramDescriptor>
+                                                    <field name="localName">
+                                                        <String>logo-location</String>
+                                                    </field>
+                                                    <field name="prefix">
+                                                        <null/>
+                                                    </field>
+                                                    <field name="namespace">
+                                                        <null/>
+                                                    </field>
+                                                </paramDescriptor>
+                                            </field>
+                                            <field name="value">
+                                                <String>https://raw.githubusercontent.com/YaleArchivesSpace/EAD3-to-PDF-UA/master/</String>
+                                            </field>
+                                            <field name="hasXPathValue">
+                                                <Boolean>false</Boolean>
+                                            </field>
+                                            <field name="isStatic">
+                                                <Boolean>false</Boolean>
+                                            </field>
+                                        </transformationParameter>
+                                        <transformationParameter>
+                                            <field name="paramDescription">
+                                                <paramDescriptor>
+                                                    <field name="localName">
+                                                        <String>primary-font-for-pdf</String>
+                                                    </field>
+                                                    <field name="prefix">
+                                                        <null/>
+                                                    </field>
+                                                    <field name="namespace">
+                                                        <null/>
+                                                    </field>
+                                                </paramDescriptor>
+                                            </field>
+                                            <field name="value">
+                                                <String>Open_Sans</String>
+                                            </field>
+                                            <field name="hasXPathValue">
+                                                <Boolean>false</Boolean>
+                                            </field>
+                                            <field name="isStatic">
+                                                <Boolean>false</Boolean>
+                                            </field>
+                                        </transformationParameter>
+                                        <transformationParameter>
+                                            <field name="paramDescription">
+                                                <paramDescriptor>
+                                                    <field name="localName">
+                                                        <String>sans-serif-font</String>
+                                                    </field>
+                                                    <field name="prefix">
+                                                        <null/>
+                                                    </field>
+                                                    <field name="namespace">
+                                                        <null/>
+                                                    </field>
+                                                </paramDescriptor>
+                                            </field>
+                                            <field name="value">
+                                                <String>Open_Sans</String>
+                                            </field>
+                                            <field name="hasXPathValue">
+                                                <Boolean>false</Boolean>
+                                            </field>
+                                            <field name="isStatic">
+                                                <Boolean>false</Boolean>
+                                            </field>
+                                        </transformationParameter>
+                                        <transformationParameter>
+                                            <field name="paramDescription">
+                                                <paramDescriptor>
+                                                    <field name="localName">
+                                                        <String>serif-font</String>
+                                                    </field>
+                                                    <field name="prefix">
+                                                        <null/>
+                                                    </field>
+                                                    <field name="namespace">
+                                                        <null/>
+                                                    </field>
+                                                </paramDescriptor>
+                                            </field>
+                                            <field name="value">
+                                                <String>Open_Sans</String>
+                                            </field>
+                                            <field name="hasXPathValue">
+                                                <Boolean>false</Boolean>
+                                            </field>
+                                            <field name="isStatic">
+                                                <Boolean>false</Boolean>
+                                            </field>
+                                        </transformationParameter>
+                                        <transformationParameter>
+                                            <field name="paramDescription">
+                                                <paramDescriptor>
+                                                    <field name="localName">
+                                                        <String>suppressInternalComponents</String>
+                                                    </field>
+                                                    <field name="prefix">
+                                                        <null/>
+                                                    </field>
+                                                    <field name="namespace">
+                                                        <null/>
+                                                    </field>
+                                                </paramDescriptor>
+                                            </field>
+                                            <field name="value">
+                                                <String>false()</String>
+                                            </field>
+                                            <field name="hasXPathValue">
+                                                <Boolean>true</Boolean>
+                                            </field>
+                                            <field name="isStatic">
+                                                <Boolean>false</Boolean>
+                                            </field>
+                                        </transformationParameter>
+                                        <transformationParameter>
+                                            <field name="paramDescription">
+                                                <paramDescriptor>
+                                                    <field name="localName">
+                                                        <String>suppressInternalComponentsInPDF</String>
+                                                    </field>
+                                                    <field name="prefix">
+                                                        <null/>
+                                                    </field>
+                                                    <field name="namespace">
+                                                        <null/>
+                                                    </field>
+                                                </paramDescriptor>
+                                            </field>
+                                            <field name="value">
+                                                <String>false()</String>
+                                            </field>
+                                            <field name="hasXPathValue">
+                                                <Boolean>true</Boolean>
+                                            </field>
+                                            <field name="isStatic">
+                                                <Boolean>false</Boolean>
+                                            </field>
+                                        </transformationParameter>
+                                    </list>
+                                </field>
+                                <field name="cascadingStylesheets">
+                                    <String-array>
+                                        <String>https://raw.githubusercontent.com/YaleArchivesSpace/EAD3-to-PDF-UA/master/ead3-to-pdf-ua.xsl</String>
+                                    </String-array>
+                                </field>
+                                <field name="xslTransformer">
+                                    <String>Saxon-PE</String>
+                                </field>
+                                <field name="extensionURLs">
+                                    <String-array/>
+                                </field>
+                            </scenario>
+                            <scenario>
+                                <field name="advancedOptionsMap">
+                                    <null/>
+                                </field>
+                                <field name="name">
+                                    <String>7 EAD3 convert for validation purposes</String>
+                                </field>
+                                <field name="baseURL">
+                                    <String/>
+                                </field>
+                                <field name="footerURL">
+                                    <String/>
+                                </field>
+                                <field name="fOPMethod">
+                                    <String>pdf</String>
+                                </field>
+                                <field name="fOProcessorName">
+                                    <String>Apache FOP</String>
+                                </field>
+                                <field name="headerURL">
+                                    <String/>
+                                </field>
+                                <field name="inputXSLURL">
+                                    <String>https://raw.githubusercontent.com/YaleArchivesSpace/EAD3-to-PDF-UA/master/xslt-to-update-the-ASpace-export/yale.aspace_v2_to_yale_ead3.xsl</String>
+                                </field>
+                                <field name="inputXMLURL">
+                                    <String>${currentFileURL}</String>
+                                </field>
+                                <field name="defaultScenario">
+                                    <Boolean>false</Boolean>
+                                </field>
+                                <field name="isFOPPerforming">
+                                    <Boolean>false</Boolean>
+                                </field>
+                                <field name="type">
+                                    <String>XSL</String>
+                                </field>
+                                <field name="saveAs">
+                                    <Boolean>true</Boolean>
+                                </field>
+                                <field name="openInBrowser">
+                                    <Boolean>false</Boolean>
+                                </field>
+                                <field name="outputResource">
+                                    <String>${cfn}-Yale.xml</String>
+                                </field>
+                                <field name="openOtherLocationInBrowser">
+                                    <Boolean>false</Boolean>
+                                </field>
+                                <field name="locationToOpenInBrowserURL">
+                                    <null/>
+                                </field>
+                                <field name="openInEditor">
+                                    <Boolean>true</Boolean>
+                                </field>
+                                <field name="showInHTMLPane">
+                                    <Boolean>false</Boolean>
+                                </field>
+                                <field name="showInXMLPane">
+                                    <Boolean>true</Boolean>
+                                </field>
+                                <field name="showInSVGPane">
+                                    <Boolean>false</Boolean>
+                                </field>
+                                <field name="showInResultSetPane">
+                                    <Boolean>false</Boolean>
+                                </field>
+                                <field name="useXSLTInput">
+                                    <Boolean>true</Boolean>
+                                </field>
+                                <field name="xsltParams">
+                                    <list/>
+                                </field>
+                                <field name="cascadingStylesheets">
+                                    <String-array/>
+                                </field>
+                                <field name="xslTransformer">
+                                    <String>Saxon-PE</String>
+                                </field>
+                                <field name="extensionURLs">
+                                    <String-array/>
+                                </field>
+                            </scenario>
                         </scenario-array>
-                    </entry>
-                    <entry>
-                        <String>validation.scenario.associations</String>
-                        <scenarioAssociation-array>
-                            <scenarioAssociation>
-                                <field name="url">
-                                    <String>../RU.1144_ead%20(1)_bpg.xml</String>
-                                </field>
-                                <field name="scenarioIds">
-                                    <list>
-                                        <String>YaleEADbpg-validation</String>
-                                    </list>
-                                </field>
-                                <field name="scenarioTypes">
-                                    <list>
-                                        <String>Validation_scenario</String>
-                                    </list>
-                                </field>
-                            </scenarioAssociation>
-                            <scenarioAssociation>
-                                <field name="url">
-                                    <String>../gizzi-foldered_per_collection_bpg.xml</String>
-                                </field>
-                                <field name="scenarioIds">
-                                    <list>
-                                        <String>YaleEADbpg-validation</String>
-                                    </list>
-                                </field>
-                                <field name="scenarioTypes">
-                                    <list>
-                                        <String>Validation_scenario</String>
-                                    </list>
-                                </field>
-                            </scenarioAssociation>
-                            <scenarioAssociation>
-                                <field name="url">
-                                    <String>../gizzi-foldered_per_collection.xml</String>
-                                </field>
-                                <field name="scenarioIds">
-                                    <list>
-                                        <String>YaleEADbpg-validation</String>
-                                    </list>
-                                </field>
-                                <field name="scenarioTypes">
-                                    <list>
-                                        <String>Validation_scenario</String>
-                                    </list>
-                                </field>
-                            </scenarioAssociation>
-                        </scenarioAssociation-array>
                     </entry>
                     <entry>
                         <String>validation.scenarios</String>
                         <validationScenario-array>
+                            <validationScenario>
+                                <field name="pairs">
+                                    <list>
+                                        <validationUnit>
+                                            <field name="validationType">
+                                                <validationUnitType>
+                                                    <field name="validationInputType">
+                                                        <String>text/xml</String>
+                                                    </field>
+                                                </validationUnitType>
+                                            </field>
+                                            <field name="url">
+                                                <String>${currentFileURL}</String>
+                                            </field>
+                                            <field name="validationEngine">
+                                                <validationEngine>
+                                                    <field name="engineType">
+                                                        <String>&lt;Default engine></String>
+                                                    </field>
+                                                    <field name="allowsAutomaticValidation">
+                                                        <Boolean>true</Boolean>
+                                                    </field>
+                                                </validationEngine>
+                                            </field>
+                                            <field name="allowAutomaticValidation">
+                                                <Boolean>true</Boolean>
+                                            </field>
+                                            <field name="extensions">
+                                                <null/>
+                                            </field>
+                                            <field name="validationSchema">
+                                                <validationUnitSchema>
+                                                    <field name="dtdSchemaPublicID">
+                                                        <null/>
+                                                    </field>
+                                                    <field name="schematronPhase">
+                                                        <null/>
+                                                    </field>
+                                                    <field name="type">
+                                                        <Integer>7</Integer>
+                                                    </field>
+                                                    <field name="uri">
+                                                        <String>https://raw.githubusercontent.com/fordmadox/schematrons/master/ArchivesSpace-EAD-validator.sch</String>
+                                                    </field>
+                                                </validationUnitSchema>
+                                            </field>
+                                        </validationUnit>
+                                    </list>
+                                </field>
+                                <field name="type">
+                                    <String>Validation_scenario</String>
+                                </field>
+                                <field name="name">
+                                    <String>ArchivesSpace-PreIngest-validation</String>
+                                </field>
+                            </validationScenario>
                             <validationScenario>
                                 <field name="pairs">
                                     <list>
@@ -842,54 +1081,11 @@
                                     <String>YaleEADbpg-validation</String>
                                 </field>
                             </validationScenario>
-                            <validationScenario>
-                                <field name="pairs">
-                                    <list>
-                                        <validationUnit>
-                                            <field name="validationType">
-                                                <validationUnitType>
-                                                    <field name="validationInputType">
-                                                        <String>text/sch</String>
-                                                    </field>
-                                                </validationUnitType>
-                                            </field>
-                                            <field name="url">
-                                                <String>https://raw.githubusercontent.com/fordmadox/schematrons/master/ArchivesSpace-EAD-validator.sch</String>
-                                            </field>
-                                            <field name="validationEngine">
-                                                <validationEngine>
-                                                    <field name="engineType">
-                                                        <String>&lt;Default engine></String>
-                                                    </field>
-                                                    <field name="allowsAutomaticValidation">
-                                                        <Boolean>true</Boolean>
-                                                    </field>
-                                                </validationEngine>
-                                            </field>
-                                            <field name="allowAutomaticValidation">
-                                                <Boolean>true</Boolean>
-                                            </field>
-                                            <field name="extensions">
-                                                <null/>
-                                            </field>
-                                            <field name="validationSchema">
-                                                <null/>
-                                            </field>
-                                        </validationUnit>
-                                    </list>
-                                </field>
-                                <field name="type">
-                                    <String>Validation_scenario</String>
-                                </field>
-                                <field name="name">
-                                    <String>ArchivesSpace-PreIngest-validation</String>
-                                </field>
-                            </validationScenario>
                         </validationScenario-array>
                     </entry>
                 </serializableOrderedMap>
             </serialized>
         </options>
     </meta>
-    <projectTree name="aspace-to-yfad-plus-excel-and-foldering.xpr"/>
+    <projectTree name="aspace-plus-excel-at-yale-v2020-11-15.xpr"/>
 </project>
