@@ -825,9 +825,9 @@ recheck how origination names are parsed (multiples AND font colors)
                             select="
                                 if (preceding-sibling::ss:Cell[ss:NamedCell/@ss:Name = 'container_1_type'][ss:Data[normalize-space()]])
                                 then
-                                    preceding-sibling::ss:Cell[ss:NamedCell/@ss:Name = 'container_1_type']/ss:Data
+                                    preceding-sibling::ss:Cell[ss:NamedCell/@ss:Name = 'container_1_type']/translate(lower-case(normalize-space(ss:Data)), ' ', '_')
                                 else
-                                    'Box'"
+                                    'box'"
                         />
                     </xsl:attribute>
                     <xsl:if
@@ -849,9 +849,9 @@ recheck how origination names are parsed (multiples AND font colors)
                             select="
                                 if (preceding-sibling::ss:Cell[ss:NamedCell/@ss:Name = 'container_2_type'][ss:Data[normalize-space()]])
                                 then
-                                    preceding-sibling::ss:Cell[1]/ss:Data
+                                    preceding-sibling::ss:Cell[1]/translate(lower-case(normalize-space(ss:Data)), ' ', '_')
                                 else
-                                    'Folder'"
+                                    'folder'"
                         />
                     </xsl:attribute>
                     <xsl:apply-templates/>
@@ -865,9 +865,9 @@ recheck how origination names are parsed (multiples AND font colors)
                             select="
                                 if (preceding-sibling::ss:Cell[ss:NamedCell/@ss:Name = 'container_3_type'][ss:Data[normalize-space()]])
                                 then
-                                    preceding-sibling::ss:Cell[1]/ss:Data
+                                    preceding-sibling::ss:Cell[1]/translate(lower-case(normalize-space(ss:Data)), ' ', '_')
                                 else
-                                    'Carton'"
+                                    'carton'"
                         />
                     </xsl:attribute>
                     <xsl:apply-templates/>
