@@ -1077,41 +1077,66 @@ recheck how origination names are parsed (multiples AND font colors)
             <xsl:when test="number($column-number) = (52) and not(*)">
                 <xsl:choose>
                     <xsl:when
-                        test="
-                        key('style-ids_match-for-color', $style-id)/ss:Font/@ss:Color = ('#00B0F0', '#00CCFF')
-                        and
-                        not(ss:Data/html:Font/@html:Color = ('#00B0F0', '#00CCFF'))">
+                        test="key('style-ids_match-for-color', $style-id)/ss:Font/@ss:Color = ('#00B0F0', '#00CCFF')">
                         <subject>
                             <xsl:apply-templates/>
                         </subject>
                     </xsl:when>
                     <xsl:when
-                        test="
-                            key('style-ids_match-for-color', $style-id)/ss:Font/@ss:Color = ('#0070C0', '#0066CC')
-                            and
-                            not(ss:Data/html:Font/@html:Color = ('#0070C0', '#0066CC'))">
+                        test="key('style-ids_match-for-color', $style-id)/ss:Font/@ss:Color = ('#0070C0', '#0066CC')">
                         <corpname>
                             <xsl:apply-templates/>
                         </corpname>
                     </xsl:when>
                     <xsl:when
-                        test="
-                            key('style-ids_match-for-color', $style-id)/ss:Font/@ss:Color = ('#666699', '#7030A0')
-                            and
-                            not(ss:Data/html:Font/@html:Color = ('#666699', '#7030A0'))">
+                        test="key('style-ids_match-for-color', $style-id)/ss:Font/@ss:Color = ('#666699', '#7030A0')">
                         <persname>
                             <xsl:apply-templates/>
                         </persname>
                     </xsl:when>
                     <xsl:when
-                        test="
-                            key('style-ids_match-for-color', $style-id)/ss:Font/@ss:Color = ('#ED7D31', '#FF6600')
-                            and
-                            not(ss:Data/html:Font/@html:Color = ('#ED7D31', '#FF6600'))">
+                        test="key('style-ids_match-for-color', $style-id)/ss:Font/@ss:Color = ('#ED7D31', '#FF6600')">
                         <famname>
                             <xsl:apply-templates/>
                         </famname>
                     </xsl:when>
+                    <xsl:when
+                        test="key('style-ids_match-for-color', $style-id)/ss:Font/@ss:Color = ('#FF0000')">
+                        <title>
+                            <xsl:apply-templates/>
+                        </title>
+                    </xsl:when>
+                    <xsl:when
+                        test="key('style-ids_match-for-color', $style-id)/ss:Font/@ss:Color = ('#44546A', '#339966')">
+                        <geogname>
+                            <xsl:apply-templates/>
+                        </geogname>
+                    </xsl:when>
+                    <xsl:when
+                        test="key('style-ids_match-for-color', $style-id)/ss:Font/@ss:Color = ('#00B050', '#008080')">
+                        <genreform>
+                            <xsl:apply-templates/>
+                        </genreform>
+                    </xsl:when>
+                    <xsl:when
+                        test="key('style-ids_match-for-color', $style-id)/ss:Font/@ss:Color = ('#FFC000', '#FFCC00')">
+                        <occupation>
+                            <xsl:apply-templates/>
+                        </occupation>
+                    </xsl:when>
+                    <xsl:when
+                        test="key('style-ids_match-for-color', $style-id)/ss:Font/@ss:Color = ('#FF00FF')">
+                        <function>
+                            <xsl:apply-templates/>
+                        </function>
+                    </xsl:when>
+                    <xsl:when
+                        test="key('style-ids_match-for-color', $style-id)/ss:Font/@ss:Color = ('#000000')">
+                        <name>
+                            <xsl:apply-templates/>
+                        </name>
+                    </xsl:when>
+                    <!-- will likely make an invalid file, but that's a good warning before importing something completely inaccurate.-->
                     <xsl:otherwise>
                         <xsl:apply-templates/>
                     </xsl:otherwise>
